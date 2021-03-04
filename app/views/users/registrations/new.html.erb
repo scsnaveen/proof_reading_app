@@ -1,0 +1,91 @@
+<div class="container">
+  <div class="row main">
+    <div class="panel-heading">
+      <div class="panel-title text-center">
+        <h1 class="title">Sign Up</h1>
+        <hr />
+      </div>
+    </div>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "users/shared/error_messages", resource: resource %>
+  
+
+  <div class="form-group">
+    <%= f.label :email ,class: "cols-sm-2"%><br />
+    <div class="cols-sm-10">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",class: "form-control" %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :password ,class: "cols-sm-2"%><br />
+    <div class="cols-sm-10">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+        <%= f.password_field :password, autocomplete: "new-password",class: "form-control" %>
+      </div>
+    </div>
+    <% if @minimum_password_length %>
+        <em>(<%= @minimum_password_length %> characters minimum)</em>
+        <% end %><br />
+  </div>
+
+<div class="form-group">
+    <%= f.label :password_confirmation ,class: "cols-sm-2"%><br />
+    <div class="cols-sm-10">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password",class: "form-control" %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :first_name ,class: "cols-sm-2"%><br />
+    <div class="cols-sm-10">
+      <div class="input-group">
+       <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+        <%= f.text_field :first_name, autocomplete: "new-password",class: "form-control" %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :last_name ,class: "cols-sm-2"%><br />
+    <div class="cols-sm-10">
+      <div class="input-group">
+       <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+        <%= f.text_field :last_name, autocomplete: "new-password",class: "form-control" %>
+      </div>
+    </div>
+  </div>
+
+<div class="form-group">
+    <%= f.label :user_name ,class: "cols-sm-2"%><br />
+    <div class="cols-sm-10">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+        <%= f.text_field :user_name, autocomplete: "new-password",class: "form-control" %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :phone_number ,class: "cols-sm-2"%><br />
+    <div class="cols-sm-10">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-phone fa" aria-hidden="true"></i></span>
+        <%= f.text_field :phone_number, autocomplete: "new-password",class: "form-control" %>
+      </div>
+    </div>
+  </div>
+
+<div class="form-group ">
+  <%= f.submit "Sign up",class: "btn btn-primary btn-lg btn-block login-button" %>
+</div>
+  
+<% end %>
+
+<%= render "users/shared/links" %>
+</div>
+</div>

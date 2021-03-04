@@ -10,6 +10,23 @@
   </head>
 
   <body>
+    <%= render 'layouts/nav_bar' %>
+      <div class="container">
+        <% if notice %>
+          <p class="alert alert-success"><%= notice %></p>
+        <% end %>
+        <% if alert %>
+          <p class="alert alert-danger"><%= alert %></p>
+        <% end %>
+      </div>
     <%= yield %>
+    <%= render 'layouts/footer' %>
   </body>
 </html>
+<script>
+$(document).ready(function() {
+      setTimeout(function() {
+    $('.alert').slideUp();
+  }, 2500);
+});
+</script>

@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row main">
+    <div class="panel-heading">
+      <div class="panel-title text-center">
+        <h1 class="title">Log in</h1>
+        <hr />
+      </div>
+    </div>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+
+  <div class="form-group">
+    <%= f.label :email ,class: "cols-sm-2"%><br />
+    <div class="cols-sm-10">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",class: "form-control" %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :password ,class: "cols-sm-2"%><br />
+    <div class="cols-sm-10">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+        <%= f.password_field :password, autocomplete: "current-password",class: "form-control" %>
+      </div>
+    </div>
+  </div>
+
+  <% if devise_mapping.rememberable? %>
+    <div class="form-check">
+      <%= f.check_box :remember_me ,class: "form-check-input"%>
+      <%= f.label :remember_me %>
+    </div>
+  <% end %>
+
+  <div class="form-group ">
+  <%= f.submit "Log in",class: "btn btn-primary btn-lg btn-block login-button" %>
+</div>
+<% end %>
+
+<%= render "users/shared/links" %>
+</div>
+</div>

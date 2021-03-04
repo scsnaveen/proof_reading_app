@@ -1,0 +1,88 @@
+<nav class="navbar  navbar-expand-lg navbar-dark bg-dark navbar-inverse navbar-fixed-top">
+	<div class="navbar-header">
+      <a class="navbar-brand" href="#">ProofReading</a>
+    </div>
+  <div class="container-fluid collapse navbar-collapse justify-content-end">
+    
+    <ul class="nav navbar-nav ">
+      <%if current_user.present?%>
+				<li>
+					<a class="nav-link active" href="#">
+					<%= current_user.user_name.capitalize %></a>
+				</li>
+				<li>
+					<a class="nav-link active "  href="/users/sign_out">Sign Out</a>
+				</li>
+				<%else%>
+				<li>
+					<a class="nav-link active "  href="/users/sign_up">Sign up</a>
+				</li>
+				<li>
+					<a class="nav-link active "  href="/users/sign_in">Sign in</a>
+				</li>
+			<%end%>
+    </ul>
+  </div>
+</nav>
+<nav class="menum navbar navbar-light navbar-expand-md justify-content-center fixed-top">
+	<div class="container">
+
+	<div class="navbar-collapse collapse justify-content-between align-items-center w-100" id="collapsingNavbar2">
+		<ul class="topBotomBordersOut navbar-nav mx-auto text-center">
+			<li class="nav-item active">
+				<a class="nav-link" href="/">Home</a>
+			</li>
+			<li class="nav-item ">
+				<a class="nav-link" href="/post/new">Post</a>
+			</li>
+		</ul>
+	</div>
+	</div>   
+</nav>
+
+<style>
+	ul {
+		list-style: none;
+	}
+.nav-item {
+		font-family: Century Gothic;
+		margin: 0 auto;
+		padding: 5em 3em;
+		text-align: center;
+}
+.nav-item a {
+		color: #000;
+		text-decoration: none;
+		font: 20px Century Gothic;
+		margin: 0px 10px;
+		padding: 10px 10px;
+		position: relative;
+		z-index: 0;
+}
+
+
+/* Top & Bottom Borders Out */
+.topBotomBordersOut a:before, .topBotomBordersOut a:after {
+		position: absolute;
+		left: 0px;
+		width: 100%;
+		height: 2px;
+		background: #AAA;
+		content:"";
+		opacity: 0;
+		-webkit-transition: all 0.3s;
+		transition: all 0.3s;
+}
+.topBotomBordersOut a:before {
+		top: 0px;
+		transform: translateY(10px);
+}
+.topBotomBordersOut a:after {
+		bottom: 0px;
+		transform: translateY(-10px);
+}
+.topBotomBordersOut a:hover:before, .topBotomBordersOut a:hover:after {
+		opacity: 1;
+		transform: translateY(0px);
+}
+</style>

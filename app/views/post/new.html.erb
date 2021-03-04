@@ -1,0 +1,12 @@
+<div class="container" >
+	<div class="row-auto">
+		<div class="col-md-6 mx-auto mb-5">
+
+		<%= form_with(model: @post, url: post_create_path(@post), method: "post") do |f| %>
+			<%=f.label :text%>
+			<%= f.text_area :text ,class: "form-control" %>
+			<%= f.submit 'Post', class: "btn btn-success" %>
+		<% end %>
+		</div>
+	</div>
+</div>
