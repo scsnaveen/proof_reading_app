@@ -4,7 +4,7 @@ class CreatePosts < ActiveRecord::Migration[6.0]
       t.text :text
       t.references :user, null: false, foreign_key: true
       t.integer :words
-      t.string :status
+      t.string :status, default: "pending" 
 
       t.timestamps
     end

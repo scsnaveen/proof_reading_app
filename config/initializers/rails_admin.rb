@@ -1,3 +1,9 @@
+#custom_action for post_requests
+require Rails.root.join('lib', 'rails_admin', "post_requests.rb")
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::PostRequests)
+require Rails.root.join('lib', 'rails_admin', "proof_reading.rb")
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ProofReading)
+
 RailsAdmin.config do |config|
 
   ### Popular gems integration
@@ -33,6 +39,17 @@ RailsAdmin.config do |config|
     edit
     delete
     show_in_app
+    post_requests do 
+      visible do 
+        bindings[:abstract_model].model.to_s == "Admin"
+      end
+    end
+    proof_reading do 
+      visible do 
+        bindings[:abstract_model].model.to_s == "Post"
+      end
+    end
+
 
     ## With an audit adapter, you can add:
     # history_index

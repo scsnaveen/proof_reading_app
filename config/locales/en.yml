@@ -31,3 +31,14 @@
 
 en:
   hello: "Hello world"
+  admin:
+    actions:
+      post_requests:
+        title: "post requests"
+        menu: "post requests"
+        breadcrumb:  "post requests"
+      proof_reading:
+        title: "proof reading"
+        menu: "proof reading"
+        breadcrumb: "proof reading"
+

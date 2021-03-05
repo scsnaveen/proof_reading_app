@@ -1,0 +1,23 @@
+<div class="container">
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Text</th>
+      <th scope="col">words</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @posts.all.each do |post|%>
+    <tr>
+      <td><%=post.id%></td>
+      <td><%=post.text%></td>
+      <td><%=post.words%></td>
+      <td><%=post.status%></td>
+      <td><%=link_to "view",post_show_path(:id=>post.id)%></td>
+    </tr>
+    <%end%>
+  </tbody>
+</table>
+</div>

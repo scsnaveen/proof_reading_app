@@ -1,16 +1,5 @@
 # frozen_string_literal: true
-require 'rails_admin/main_controller'
 
-module RailsAdmin
-
-    class MainController < RailsAdmin::ApplicationController
-        # rescue for the admins who cannot access  
-        rescue_from CanCan::AccessDenied do |exception|
-            redirect_to rails_admin.dashboard_path
-            flash[:alert] = 'Access denied.'
-        end
-    end
-end
 class Ability
   include CanCan::Ability
 
@@ -20,9 +9,18 @@ class Ability
       # admin ||= Admin.new # guest user (not logged in)
       if admin.role =="Super Admin"
         can :manage, :all
+      elsif admin.role == "Admin"
+        can :access, :rails_admin
+        can :dashboard ,:all
+        can :read, :dashboard
+        can :read, [Post]
+        can :proof_reading,:all
+        can :update,[Post] 
       else
-        can :read, :all
-      end
+        can :access, :rails_admin
+        can :dashboard ,:all
+
+    end
     #
     # The first argument to `can` is the action you are giving the user
     # permission to do.

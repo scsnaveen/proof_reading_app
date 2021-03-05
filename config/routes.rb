@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 	devise_scope :admin do
 		get 'admins/sign_out', to: 'admins/sessions#destroy'
 	end
+	# resources :post
+	get 'post/show'
   get 'post/new'
   post 'post/create'
   get 'post/index'
@@ -14,6 +16,7 @@ Rails.application.routes.draw do
   	registrations: 'users/registrations', 
   	sessions: 'users/sessions'
   }
+
 	root 'welcome#index'
 	devise_scope :user do
 		get 'users/sign_out', to: 'users/sessions#destroy'
