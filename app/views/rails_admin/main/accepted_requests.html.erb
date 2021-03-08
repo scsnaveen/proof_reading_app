@@ -1,0 +1,48 @@
+<table class="table">
+	<h1>Accepted requests</h1>
+	<thead class="thead-dark">
+	<tr>
+		<th scope="col">Id</th>
+		<th scope="col">Text</th>
+		<th scope="col">Time</th>
+		<th scope="col">Status</th>
+	</tr>
+	</thead>
+	<tbody>
+	<% @accepted_requests.all.each do |f|%>
+	<tr>
+		<td><%= f.post_id%></td>
+		<% text = Post.find_by(:id=>f.post_id).text%>
+		<td><%=text%></td>
+		<td><%=f.time_taken%></td>
+		<td><%=f.status%></td>
+		<td><%=link_to 'change',proof_reading_path(:id=>f.post_id)%>
+		</td>
+	</tr>
+	<%end%>
+	</tbody>
+</table>
+<table class="table">
+	<h1>User unsatisified requests</h1>
+	<thead class="thead-dark">
+	<tr>
+		<th scope="col">Id</th>
+		<th scope="col">Text</th>
+		<th scope="col">Time</th>
+		<th scope="col">Status</th>
+	</tr>
+	</thead>
+	<tbody>
+	<% @rejected_requests.all.each do |f|%>
+	<tr>
+		<td><%= f.post_id%></td>
+		<% text = Post.find_by(:id=>f.post_id).text%>
+		<td><%=text%></td>
+		<td><%=f.time_taken%></td>
+		<td><%=f.status%></td>
+		<td><%=link_to 'change',proof_reading_path(:id=>f.post_id)%>
+		</td>
+	</tr>
+	<%end%>
+	</tbody>
+</table>

@@ -1,0 +1,26 @@
+<table class="table">
+	<thead class="thead-dark">
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Text</th>
+			<th scope="col">words</th>
+			<th scope="col">Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @posts.all.each do |post|%>
+		<%if @request = Request.find_by_post_id(post.id).present?%>
+		<%else%>
+			<tr>
+				<td><%= @id = post.id%></td>
+				<td><%=post.text%></td>
+				<td><%=post.words%></td>
+				<td><%=post.status%></td>
+				<%=form_for post, url: send_requests_path(post,:id=> @id,model_name: Post), as: @abstract_model.param_key, html: { method: "post", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
+					<td><%=form.submit 'send'%></td>
+				<%end%>
+			</tr>
+		<%end%>
+		<%end%>
+	</tbody>
+</table>

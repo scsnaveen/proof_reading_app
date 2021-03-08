@@ -3,7 +3,10 @@ require Rails.root.join('lib', 'rails_admin', "post_requests.rb")
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::PostRequests)
 require Rails.root.join('lib', 'rails_admin', "proof_reading.rb")
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ProofReading)
-
+require Rails.root.join('lib', 'rails_admin', "send_requests.rb")
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::SendRequests)
+require Rails.root.join('lib', 'rails_admin', "accepted_requests.rb")
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::AcceptedRequests)
 RailsAdmin.config do |config|
 
   ### Popular gems integration
@@ -41,10 +44,16 @@ RailsAdmin.config do |config|
     show_in_app
     post_requests do 
       visible do 
-        bindings[:abstract_model].model.to_s == "Admin"
+        bindings[:abstract_model].model.to_s == "Post"
       end
     end
     proof_reading do 
+      visible do 
+        bindings[:abstract_model].model.to_s == "Post"
+      end
+    end
+    send_requests
+    accepted_requests do 
       visible do 
         bindings[:abstract_model].model.to_s == "Post"
       end

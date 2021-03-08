@@ -41,4 +41,11 @@ en:
         title: "proof reading"
         menu: "proof reading"
         breadcrumb: "proof reading"
-
+      send_requests:
+        title: "send requests"
+        menu: "send requests"
+        breadcrumb: "send requests"
+      accepted_requests:
+        title: "accepted requests"
+        menu: "accepted requests"
+        breadcrumb: "accepted requests"

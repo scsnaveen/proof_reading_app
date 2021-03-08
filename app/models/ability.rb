@@ -15,7 +15,8 @@ class Ability
         can :read, :dashboard
         can :read, [Post]
         can :proof_reading,:all
-        can :update,[Post] 
+        can :post_requests,:all
+        can :accepted_requests,:all
       else
         can :access, :rails_admin
         can :dashboard ,:all

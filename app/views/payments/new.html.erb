@@ -1,0 +1,19 @@
+<h1>Payment</h1>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>post_id</th>
+      <th>text</th>
+      <th>words</th>
+      <th>proof Reader</th>
+    </tr>
+  </thead>
+  <tbody>
+        <tr>
+          <td><%= @post.id %></td>
+          <td><%= @post.text%></td>
+          <td><%= @post.words%></td>
+          <td><%= @request.accepted_admin%></td>
+        </tr>    
+  </tbody>
+</table>

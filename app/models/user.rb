@@ -11,6 +11,7 @@ class User < ApplicationRecord
 	validates :phone_number,numericality: { only_integer: true },presence: true
 	has_one :wallet
 	has_many :posts
+	has_many :payments
 	# sending a welcome mail after the confirmation
 	def after_confirmation
 		UserMailer.welcome_email(self).deliver

@@ -1,7 +1,6 @@
 class PostController < ApplicationController
 	before_action :authenticate_user!
 	def index
-		puts current_user.posts.inspect
 		@posts = current_user.posts
 	end
 
@@ -15,19 +14,28 @@ class PostController < ApplicationController
 		@post.words = @post.text.split(' ').size
 		@post.save
 		redirect_to post_new_path,notice: "Your post has been successfully saved"
-		UserMailer.admin_notify_mail(@post.user_id).deliver
+		UserMailer.admin_notify_email(@post.user_id).deliver
+		
 	end
 	
-	def update 
-		@post = Post.find(params[:id])
-		@post.update_text
-		@post.save
+	def reject
+		@post =Post.find(params[:id])
+		@request =Request.find_by(post_id: @post.id)
+	end
+	def rejected_request
+		@post =Post.find(params[:id])
+		@request = Request.find_by(post_id: @post.id)
+		@request.reason = params[:reason]
+		@request.status = "not satisified"
+		@request.update(params.permit(:reason,:status))
+		UserMailer.post_rejected_email(@request).deliver
+		redirect_to post_index_path
 	end
 	def show
 		@post =Post.find(params[:id])
 	end
 
 	def post_params
-		params.require(:post).permit(:text,:user_id,:words,:status)
+		params.require(:post).permit(:text,:user_id,:words,:status,:updated_text,:per_word_amount,:reason)
 	end
 end

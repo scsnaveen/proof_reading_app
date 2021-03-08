@@ -1,7 +1,7 @@
 module RailsAdmin
   module Config
     module Actions
-      class PostRequests < RailsAdmin::Config::Actions::Base
+      class AcceptedRequests < RailsAdmin::Config::Actions::Base
         
         register_instance_option :visible? do
           authorized? 
@@ -10,7 +10,7 @@ module RailsAdmin
         register_instance_option :collection do
           true
         end
-        #icon for PostRequests
+        #icon for AcceptedRequests
         register_instance_option :link_icon do
           'fa fa-reply'
         end
@@ -23,20 +23,14 @@ module RailsAdmin
         end
         register_instance_option :controller do
           Proc.new do
-            @requests = Request.where(:accepted_admin=> nil) 
-            # @posts = Post.where(status: "pending") 
-            if request.post?|| request.put?
-              @requests = Request.where(:accepted_admin=> nil) 
-              @post = Post.find(params[:id])
-              @post.status = "reserved"
-              @request = Request.find_by(post_id:@post.id)
-              @request.accepted_admin = current_admin.id
-              @request.save
-              @post.save
-            end   
+            puts current_admin.inspect
+            @accepted_requests = Request.where(accepted_admin: current_admin.id) 
+            @rejected_requests = Request.where(status: "not satisifed") && @accepted_requests
+            @satisifed_requests = Request.where(status == "satisifed")
+            puts Request.where(:status=> "not satisifed").inspect 
           end#Proc.new do
         end
-      end#PostRequests
+      end#AcceptedRequests
     end#Actions
   end#Config
 end#RailsAdmin
