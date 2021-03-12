@@ -1,5 +1,7 @@
 class CouponsController < ApplicationController
+	# checking if admin or not for new and create
 	before_action :authenticate_admin! ,only: [:new, :create]
+	#cchecking if its super admin or not
 	before_action :authenticate_super_admin ,only: [:new, :create]
 	#coupons displaying for the user
 	def index
@@ -18,6 +20,7 @@ class CouponsController < ApplicationController
 		@coupon_redemption.coupon_id = @coupon.id
 		@coupon_redemption.save
 	end
+	# checking if it is super admin or not
 	def authenticate_super_admin
 		if current_admin.role == "Super Admin"
 		else
