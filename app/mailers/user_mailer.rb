@@ -19,7 +19,6 @@ class UserMailer < ApplicationMailer
 	end
 	#after post has been rejected by user sending to admin notification
 	def post_rejected_email(request)
-		# @super_admin = Admin.find_by(:role =>"Super Admin")
 		@request = Request.find(request.id)
 		@admin = Admin.find(@request.accepted_admin)
 		mail(:from =>"railschecking@gmail.com",:to=> @admin.email, subject: "ProofReading Rejected")

@@ -1,0 +1,2 @@
+class TransactionHistory < ApplicationRecord
+end

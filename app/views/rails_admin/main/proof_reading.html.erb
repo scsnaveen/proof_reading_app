@@ -1,7 +1,9 @@
-<%= rails_admin_form_for @post, url: proof_reading_path(@post, @post.id,model_name: Post), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
+<%= rails_admin_form_for @post, url: proof_reading_path(@post, @post.id,@start_time,model_name: Post), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
 <label id="minutes">00</label>:<label id="seconds">00</label>
 <h4><%=@post.text%></h4>
-	
+<% @request =Request.find_by(post_id: @post.id)%>
+<%#@request.time_taken = %>
+
 <br>
 <div class="container" >
 	<form>
@@ -12,6 +14,7 @@
 			</div>
 			<h4>number of words:<p id="word-count"></p></h4>
 			<%= form.submit "Post" ,class: "btn btn-primary btn-lg"%>
+			<%= link_to "Reject" ,rejecting_request_path ,class: "btn btn-primary btn-lg"%>
 		</div>
 	</div>
 </form>
@@ -43,4 +46,6 @@ function pad(val) {
     return valString;
   }
 }
+
+
 </script>

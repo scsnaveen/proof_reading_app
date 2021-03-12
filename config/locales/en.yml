@@ -45,7 +45,11 @@ en:
         title: "send requests"
         menu: "send requests"
         breadcrumb: "send requests"
-      accepted_requests:
+      accepted_requests: 
         title: "accepted requests"
         menu: "accepted requests"
         breadcrumb: "accepted requests"
+      rejecting_request:
+        title: "rejecting request"
+        menu: "rejecting request"
+        breadcrumb: "rejecting request"

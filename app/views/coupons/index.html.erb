@@ -1,0 +1,30 @@
+<br/><br/><br/>
+<section id="plans">
+	<div class="container">
+		<div class="row">
+		<% Coupon.all.each do |coupon|%>
+
+		<%if DateTime.now.between?(coupon.valid_from,coupon.valid_until)%>
+		<%if coupon.redemption_limit != coupon.coupon_redemptions_count%>
+			<div class="col-md-4 text-center">
+				<div class="panel panel-danger panel-pricing">
+					<div class="panel-heading">
+						<i class="fa fa-desktop"></i>
+						<h3>CODE:<%= coupon.code%></h3>
+					</div>
+					<div class="panel-body text-center">
+						<p><strong>AMOUNT:<%= coupon.amount%></strong></p>
+					</div>
+					<h3><%= coupon.description%></h3>
+					<div class="panel-footer">
+						<p><strong>VALID FROM: <%= coupon.valid_from%> TO 
+						<%= coupon.valid_until%></strong></p>  
+					</div>
+				</div>
+			</div>
+		<%end%>
+		<%end%> 
+		<%end%>
+		</div>
+	</div>
+</section>

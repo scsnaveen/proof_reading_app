@@ -7,18 +7,27 @@
    		<li class="nav-item active">
 				<a class="nav-link" href="/">Home</a>
 			</li>
+			<%if current_user.present?%>
 			<li class="nav-item ">
 				<a class="nav-link" href="/post/new">Post</a>
 			</li>
 			<li class="nav-item ">
 				<a class="nav-link" href="/post/index">Posts</a>
 			</li>
+			<li class="nav-item ">
+				<a class="nav-link" href="/coupons">Coupons</a>
+			</li>
+			<%end%>
 		</ul>
     <ul class="nav navbar-nav pull-right">
     	<%if current_user.present?%>
 				<li>
 					<a class="nav-link active" href="#">
 					<%= current_user.user_name.capitalize %></a>
+				</li>
+				<li>
+					<a class="nav-link active" href="#">
+					balance:<%= Wallet.find_by(user_id:current_user.id).balance %></a>
 				</li>
 				<li>
 					<a class="nav-link active "  href="/users/sign_out">

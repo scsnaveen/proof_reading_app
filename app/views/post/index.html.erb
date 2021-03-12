@@ -6,6 +6,7 @@
       <th scope="col">Text</th>
       <th scope="col">words</th>
       <th scope="col">Status</th>
+      <th scope="col">Payment Status</th>
     </tr>
   </thead>
   <tbody>
@@ -15,6 +16,12 @@
       <td><%=post.text%></td>
       <td><%=post.words%></td>
       <td><%=post.status%></td>
+      <%payment = Payment.find_by(post_id: post.id)%>
+      <%if payment.present?%>
+      <td><%=payment.status%></td>
+      <%else%>
+        <td>pending</td>
+      <%end%>
       <td><%=link_to "view",post_show_path(:id=>post.id)%></td>
     </tr>
     <%end%>

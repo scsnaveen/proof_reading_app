@@ -29,10 +29,14 @@ module RailsAdmin
 						@posts = Post.where(status: "pending")
 						if request.post?
 							@post = Post.find(params[:id])
+							if !Request.find_by(post_id: @post.id).present?
 							@request = Request.new(params.permit(:post_id,:accepted_admin,:rejected_admin,:time_taken))
 							@request.post_id = @post.id
 							@request.save
 							UserMailer.new_post_admin_notify_email(@request).deliver
+						else
+							UserMailer.new_post_admin_notify_email(@request).deliver
+						end
 						end
 					end#Proc.new do
 				end

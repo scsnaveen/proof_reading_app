@@ -1,4 +1,4 @@
-require 'rails_admin/config/sections/update'
+
 module RailsAdmin
   module Config
     module Actions
@@ -29,13 +29,18 @@ module RailsAdmin
           Proc.new do
             if @request =Request.find_by(:accepted_admin=>current_admin)
               @post = Post.find(params[:id])
-              @starting = Time.now
+              @start_time =Time.now
+              params[:start_time] = @start_time
+              puts params[:start_time].inspect
+
               if request.post? || request.put?
                 @post.status = "edited"
-                @ending = Time.now   
-                time_taken = @ending - @starting
+                puts params[:start_time].inspect
+                @time_taken = Time.now - params[:start_time]
+                puts "====++++++++"
+                puts @time_taken.inspect
                 # puts time_taken.inspect
-                # @request.update_attributes(params.require(:request).permit(:time_taken))
+                # @request.update_attributes(params.permit(:time_taken))
                 @post.update_attributes(params.require(:post).permit(:updated_text,:status))
                 redirect_to dashboard_path
                 UserMailer.user_notify_email(@post.user_id).deliver

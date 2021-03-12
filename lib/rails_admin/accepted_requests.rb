@@ -25,9 +25,8 @@ module RailsAdmin
           Proc.new do
             puts current_admin.inspect
             @accepted_requests = Request.where(accepted_admin: current_admin.id) 
-            @rejected_requests = Request.where(status: "not satisifed") && @accepted_requests
-            @satisifed_requests = Request.where(status == "satisifed")
-            puts Request.where(:status=> "not satisifed").inspect 
+            @rejected_requests = Request.where(status: "not satisified") if @accepted_requests
+            @satisifed_requests = Request.where(status: "satisifed")
           end#Proc.new do
         end
       end#AcceptedRequests

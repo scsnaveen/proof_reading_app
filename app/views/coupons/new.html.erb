@@ -1,0 +1,61 @@
+<%= form_for @coupon, html: {class: 'form'} do |form| %>
+
+    <div class="form-label">
+      <%= form.label :code %>
+    </div>
+
+    <div >
+      <%= form.text_field :code,class: "form-control", autofocus: true %>
+    </div>
+
+    <div class="form-label">
+      <%= form.label :description %>
+    </div>
+
+    <div >
+      <%= form.text_field :description,class: "form-control" %>
+    </div>
+
+    <div class="form-label">
+      <%= form.label :redemption_limit %>
+    </div>
+
+    <div >
+      <%= form.number_field :redemption_limit, min: 0 %>
+    </div>
+
+    <div class="form-label">
+      <%= form.label :type %>
+    </div>
+
+    
+
+    <div class="form-label">
+      <%= form.label :amount %>
+    </div>
+
+    <div >
+      <%= form.text_field :amount,class: "form-control" %>
+    </div>
+
+    <div class="form-label">
+      <%= form.label :valid_from %>
+    </div>
+
+    <div >
+      <%= form.date_select :valid_from, include_blank: true, start_year: Date.current.year, end_year: Date.current.year + 10 %>
+    </div>
+
+    <div class="form-label">
+      <%= form.label :valid_until %>
+    </div>
+
+    <div >
+      <%= form.date_select :valid_until, include_blank: true, start_year: Date.current.year, end_year: Date.current.year + 10 %>
+    </div>
+
+  <div class="form-actions">
+    <%= form.submit %>
+  </div>
+
+<% end %>

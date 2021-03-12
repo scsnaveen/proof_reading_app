@@ -12,9 +12,20 @@ Rails.application.routes.draw do
 	post 'post/create'
 	get 'post/index'
 	get 'post/reject'
+	post 'post/accept'
+	get 'payments/index'
 	post 'post/rejected_request'
+	get 'post/total_amount'
 	get 'payments/new'
 	post 'payments/create'
+	post 'payments/fine'
+	get 'payments/fine'
+	get 'payments/coupon_verification'
+	resources :coupons
+	# get 'coupons/index'
+	# get 'coupons/new'
+	# post 'coupons/create'
+
 	devise_for :users, controllers: { 
 		registrations: 'users/registrations', 
 		sessions: 'users/sessions'

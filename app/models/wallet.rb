@@ -1,3 +1,3 @@
 class Wallet < ApplicationRecord
-	# belongs_to :user || :admin
+	belongs_to :user, optional: true
 end

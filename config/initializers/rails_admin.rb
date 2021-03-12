@@ -7,6 +7,8 @@ require Rails.root.join('lib', 'rails_admin', "send_requests.rb")
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::SendRequests)
 require Rails.root.join('lib', 'rails_admin', "accepted_requests.rb")
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::AcceptedRequests)
+require Rails.root.join('lib', 'rails_admin', "rejecting_request.rb")
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::RejectingRequest)
 RailsAdmin.config do |config|
 
   ### Popular gems integration
@@ -52,8 +54,17 @@ RailsAdmin.config do |config|
         bindings[:abstract_model].model.to_s == "Post"
       end
     end
-    send_requests
+    send_requests do 
+      visible do 
+        bindings[:abstract_model].model.to_s == "Post"
+      end
+    end
     accepted_requests do 
+      visible do 
+        bindings[:abstract_model].model.to_s == "Post"
+      end
+    end
+    rejecting_request do 
       visible do 
         bindings[:abstract_model].model.to_s == "Post"
       end
