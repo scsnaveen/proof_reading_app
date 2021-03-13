@@ -53,3 +53,7 @@ en:
         title: "rejecting request"
         menu: "rejecting request"
         breadcrumb: "rejecting request"
+      admin_payment:
+        title: "admin payment"
+        menu: "admin payment"
+        breadcrumb: "admin payment"

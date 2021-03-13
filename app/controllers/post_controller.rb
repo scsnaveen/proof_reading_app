@@ -20,6 +20,7 @@ class PostController < ApplicationController
 	def accept
 		@post = Post.find(params[:id])
 		@post.status ="completed"
+		@post.save
 		@request = Request.find_by(post_id: @post.id)
 		@request.status="completed"
 		@request.reason = params[:reason]
@@ -53,9 +54,18 @@ class PostController < ApplicationController
 	def show
 		@post =Post.find(params[:id])
 	end
+	# using to calculate the total amount
 	def total_amount
-			result = params[:words].to_i*params[:per_word_amount].to_i
-			
+		@result = params[:words].to_i*params[:per_word_amount].to_i
+		respond_to do |format|
+			format.html
+			format.json {render :json=>@result}
+		end
+	end
+	def invoice
+		@post = Post.find(params[:id])
+		@request= Request.find_by(post_id:@post.id)
+		@payment = Payment.find_by(post_id:@post.id)
 	end
 
 	def post_params

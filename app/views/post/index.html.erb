@@ -1,4 +1,10 @@
 <div class="container">
+  <div class="col-xs-12 text-right">   
+        <div class="next">
+          <%= link_to "New Post",post_new_path,class: "btn btn-lg btn-success"%>
+          </button>
+        </div>
+    </div>
 <table class="table">
   <thead class="thead-dark">
     <tr>
@@ -23,6 +29,12 @@
         <td>pending</td>
       <%end%>
       <td><%=link_to "view",post_show_path(:id=>post.id)%></td>
+      <%if post.status=="completed"%>
+      <td><%=link_to "invoice",post_invoice_path(:id=>post.id)%></td>
+      <%end%>
+      <%if Payment.find_by(post_id:post.id).present?%>
+       <td><%=link_to "payment",payments_show_path(:post_id=>post.id)%></td>
+      <%end%>
     </tr>
     <%end%>
   </tbody>

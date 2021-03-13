@@ -13,10 +13,6 @@ module RailsAdmin
 				register_instance_option :member do
 					true
 				end
-				#icon for SendRequests
-				register_instance_option :link_icon do
-					'fa fa-reply'
-				end
 				#pjax to false because we don't need pjax for this action
 				register_instance_option :pjax? do
 					false
@@ -61,7 +57,7 @@ module RailsAdmin
 					end
 					end#Proc.new do
 				end
-			end#SendRequests
+			end#RejectingRequest
 		end#Actions
 	end#Config
 end#RailsAdmin

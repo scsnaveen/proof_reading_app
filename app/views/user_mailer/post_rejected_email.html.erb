@@ -1,3 +1,7 @@
-<p>Your proofreading post is not satisifed by user</p>
-<%= @request.post_id%>
-<%= @request.reason%>
+<h3>Geetings <%=Admin.find(@request.accepted_admin).user_name%></h3>
+<h3>Your proofreading post is not satisifed by user</h3>
+<p>post id:<%= @request.post_id%></p><br>
+<p>Reason for rejection<%= @request.reason%></p>
+<br>
+<p>Thanks & Regards</p>
+<p>Proof Reading Team</p>

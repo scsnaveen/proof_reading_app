@@ -1,0 +1,4 @@
+<%= form_with(model: @tranaction_history, url: transaction_histories_create_path(@tranaction_history), method: "post", remote: true) do |f| %>
+<%= f.text_field :amount%>
+<%= f.submit%>
+<%end%>

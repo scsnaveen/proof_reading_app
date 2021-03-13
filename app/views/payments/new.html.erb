@@ -16,7 +16,7 @@
 						</div>
 						<div class="row">
 								<div class="text-center">
-										<h1>Invoice</h1>
+										<h1>Payment</h1>
 								</div>
 								</span>
 								<table class="table table-hover">
@@ -51,6 +51,7 @@
 														discount:<p id= "result"></p>
 													</td>
 													<td><h4><strong>Total amount:<p id ="result"></p></strong></h4></td>
+													<%= form.hidden_field :discount_amount, :id=>"result"%>
 												</tr>
 										</tbody>
 								</table>
@@ -63,18 +64,20 @@
 <script type="text/javascript">
 	
  $(document).keyup(function() {
-              
+							
 
-      $.ajax({    
-        type: "GET",
-        url: "coupon_verification",
-        data: { "code" : $("#code").val() },
-        success: function(response){ 
-         var obj = JSON.parse(response);
-         $("#result").html(obj)
-        }
+			$.ajax({    
+				type: "GET",
+				url: "coupon_verification",
+				dataType: "json",
+				data: { "code" : $("#code").val() },
+				success: function(response){ 
+				 var obj = JSON.stringify(response);
+				 $("#result").html(obj)
+				}
 
-    });
+		});
+
 });
 
 </script>

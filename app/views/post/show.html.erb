@@ -16,10 +16,12 @@
 				</div>
 			</div>
 		</div>
+		<%if @post.status!="completed"%>
 		<div class="col-md-8">
 			<%= link_to "Accept",post_accept_path(:id=>@post.id),class: "btn btn-success",method: :post %>
 			<%= link_to "Reject", post_reject_path(:id=>@post.id),class: "btn btn-danger "%>
 			</div>
+			<%end%>
 		<%end%>
 			<%else%>
 			<div class="col-md-4">

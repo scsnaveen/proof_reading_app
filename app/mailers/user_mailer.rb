@@ -5,9 +5,8 @@ class UserMailer < ApplicationMailer
 		mail(:from =>"railschecking@gmail.com",to: @user.email, subject: "Welcome!")
 	end
 	#admin notification mail after user post
-	def admin_notify_email(user_id)
-		puts user_id.inspect
-		@user = User.find(user_id)
+	def admin_notify_email(post)
+		@post= Post.find(post.id)
 		@admin = Admin.find_by(:role =>"Super Admin" )
 		mail(:from =>"railschecking@gmail.com",:to=> @admin.email, subject: "Post Notification")
 	end
@@ -24,11 +23,9 @@ class UserMailer < ApplicationMailer
 		mail(:from =>"railschecking@gmail.com",:to=> @admin.email, subject: "ProofReading Rejected")
 	end
 	# sending all admins that new post request is delivered
-	def new_post_admin_notify_email(request)
+	def new_post_admin_notify_email(admin,request)
 		@request = Request.find(request.id)
-		Admin.all.each do |admin|
-			puts admin.inspect
-     		mail(:from =>"railschecking@gmail.com",:to=> admin.email, subject: "New Post request")
-   		end
+		@admin =Admin.find(admin.id)
+     	mail(:from =>"railschecking@gmail.com",:to=> @admin.email, subject: "New Post request")
 	end
 end

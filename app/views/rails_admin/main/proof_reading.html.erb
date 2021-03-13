@@ -2,7 +2,6 @@
 <label id="minutes">00</label>:<label id="seconds">00</label>
 <h4><%=@post.text%></h4>
 <% @request =Request.find_by(post_id: @post.id)%>
-<%#@request.time_taken = %>
 
 <br>
 <div class="container" >
@@ -14,7 +13,7 @@
 			</div>
 			<h4>number of words:<p id="word-count"></p></h4>
 			<%= form.submit "Post" ,class: "btn btn-primary btn-lg"%>
-			<%= link_to "Reject" ,rejecting_request_path ,class: "btn btn-primary btn-lg"%>
+			<%= link_to "Reject" ,rejecting_request_path(@start_time) ,class: "btn btn-primary btn-lg"%>
 		</div>
 	</div>
 </form>

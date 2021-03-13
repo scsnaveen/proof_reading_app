@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 	post 'post/create'
 	get 'post/index'
 	get 'post/reject'
+	get 'post/invoice'
 	post 'post/accept'
 	get 'payments/index'
 	post 'post/rejected_request'
@@ -19,12 +20,13 @@ Rails.application.routes.draw do
 	get 'payments/new'
 	post 'payments/create'
 	post 'payments/fine'
+	get 'payments/show'
 	get 'payments/fine'
 	get 'payments/coupon_verification'
+	post 'payment/admin_payment'
+	post 'transaction_histories/create'
+	get 'transaction_histories/new'
 	resources :coupons
-	# get 'coupons/index'
-	# get 'coupons/new'
-	# post 'coupons/create'
 
 	devise_for :users, controllers: { 
 		registrations: 'users/registrations', 

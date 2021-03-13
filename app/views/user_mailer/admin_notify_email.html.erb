@@ -1,2 +1,7 @@
 <h1>Greetings <%= @admin.user_name %></h1>
-<p>You got an new post for the proofreading from <%= @user.user_name%></p>
+<p>You got an new post for the proofreading from <%= User.find(@post.user_id).user_name%></p>
+<h3>post id:</h3><%=@post.id%>
+<h3>amount paid:</h3><p><%=Payment.find_by(post_id:@post.id).paid_amount %></p>
+<br>
+<p>Thanks & Regards</p>
+<p>Proof Reading Team</p>

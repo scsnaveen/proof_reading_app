@@ -62,45 +62,25 @@ class PaymentsController < ApplicationController
 			@payment.save
 			redirect_to post_show_path(:id=>@post.id),notice: "Payment successful"
 			# sending mail to admin after successful payment
-			UserMailer.admin_notify_email(@post.user_id).deliver
+			UserMailer.admin_notify_email(@post).deliver
 		end
 	end
-	
+	# coupon verification if coupon is present or not
 	def coupon_verification
-		result =nil
+		@result =nil
 		if params[:code].present?
 			coupon =Coupon.find_by("code = ?",params[:code])
 			if coupon.present?
-			result = coupon.amount
+				@result = coupon.amount
+			end
 		end
-		  return result
-		end
-	end
-	def admin_payment
-		@post = Post.find(params[:id])
-		@request = Request.find_by(post_id: @post.id)
-		@admin_wallet = Wallet.find_by(admin_id:@request.accepted_admin)
-		@super_admin_wallet =Wallet.find_by(:admin_id=>1)
-			@payment                        = Payment.new
-			@payment.admin_id                = Request.find_by(post_id: @post.id).accepted_admin
-			@payment.post_id                = @post.id
-			@payment.amount                 = @post.words * @post.per_word_amount - 
-			@payment.status                 = "pending"
-			@payment.paid_amount            = @payment.amount - 10
-				@admin_wallet.transaction do
-					@admin_wallet.with_lock do 
-						@super_admin_wallet.balance = @super_admin_wallet.balance -  @payment.paid_amount 
-						@super_admin_wallet.save
-
-						@admin_wallet.balance = @admin_wallet.balance + @payment.paid_amount 
-						@admin_wallet.save
-					end
-				end
-			@payment.status = "success"
-			@payment.save
+		respond_to do |format|
+    		format.html
+    		format.json {render :json=>@result}
+  		end
 	end
 	def show 
-		@payment = current_user.payments
+		@payment = Payment.find_by(post_id:params[:post_id])
 	end
 end
 

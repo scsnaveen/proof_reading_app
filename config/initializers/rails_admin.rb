@@ -9,6 +9,8 @@ require Rails.root.join('lib', 'rails_admin', "accepted_requests.rb")
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::AcceptedRequests)
 require Rails.root.join('lib', 'rails_admin', "rejecting_request.rb")
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::RejectingRequest)
+require Rails.root.join('lib', 'rails_admin', "admin_payment.rb")
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::AdminPayment)
 RailsAdmin.config do |config|
 
   ### Popular gems integration
@@ -43,7 +45,6 @@ RailsAdmin.config do |config|
     show
     edit
     delete
-    show_in_app
     post_requests do 
       visible do 
         bindings[:abstract_model].model.to_s == "Post"
@@ -67,6 +68,11 @@ RailsAdmin.config do |config|
     rejecting_request do 
       visible do 
         bindings[:abstract_model].model.to_s == "Post"
+      end
+    end
+    admin_payment do 
+      visible do 
+        bindings[:abstract_model].model.to_s == "Payment"
       end
     end
 
