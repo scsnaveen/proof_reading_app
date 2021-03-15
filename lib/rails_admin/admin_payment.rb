@@ -47,6 +47,7 @@ module RailsAdmin
 								end
 							@payment.status = "success"
 							@payment.save
+						UserMailer.admin_payment_notify_email(@payment).deliver
 						end
 					end#Proc.new do
 				end

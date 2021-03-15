@@ -1,7 +1,7 @@
 class TransactionHistoriesController < ApplicationController
 	before_action :authenticate_admin!
 	def index
-		@transaction_histories = TransactionHistory.all
+		@transaction_histories = current_admin.transaction_histories
 	end
 	def new
 		@transaction_history = TransactionHistory.new
@@ -11,8 +11,12 @@ class TransactionHistoriesController < ApplicationController
 	def create
 		@amount =params[:amount].to_f
 		@wallet = current_admin.wallet
+		minimum_balance = 10
 		# amount must be greater than wallet
 		if @wallet.balance <  @amount
+			redirect_to root_path,flash[:error]= "No Sufficient balance " 
+			return
+		elsif @amount < minimum_balance
 			redirect_to root_path,flash[:error]= "No Sufficient balance " 
 			return
 		else
@@ -28,5 +32,8 @@ class TransactionHistoriesController < ApplicationController
 			@transaction_history.current_wallet_amount = @wallet.balance - @amount
 			@transaction_history.save
 		end
+		@wallet.balance = @transaction_history.current_wallet_amount
+		@wallet.save
+		render :action => "new",notice: "#{@amount} is withdrawen from ypur account" 
 	end
 end

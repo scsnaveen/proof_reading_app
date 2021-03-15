@@ -26,6 +26,13 @@ Rails.application.routes.draw do
 	post 'payment/admin_payment'
 	post 'transaction_histories/create'
 	get 'transaction_histories/new'
+	get 'transaction_histories/index'
+	get 'deposits/new'
+	post 'deposits/create'
+	get 'deposits/update'
+	get 'deposits/index'
+	get 'payments/tot_amount'
+	delete 'deposits/destroy'
 	resources :coupons
 
 	devise_for :users, controllers: { 

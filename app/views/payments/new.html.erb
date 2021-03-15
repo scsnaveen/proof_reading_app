@@ -48,10 +48,10 @@
 													<%=form.label :coupon_code%>
 													<%= form.text_field :coupon_code,:id => "code",:keyup=>"total_amount()" %></td>
 													<td>
-														discount:<p id= "result"></p>
+														discount:<p id= "result"></p><%= form.hidden_field :discount_amount, :id=>"result"%>
 													</td>
-													<td><h4><strong>Total amount:<p id ="result"></p></strong></h4></td>
-													<%= form.hidden_field :discount_amount, :id=>"result"%>
+													<td><h4><strong>Total amount:<p id ="value"></p></strong></h4>
+													</td>
 												</tr>
 										</tbody>
 								</table>
@@ -74,6 +74,20 @@
 				success: function(response){ 
 				 var obj = JSON.stringify(response);
 				 $("#result").html(obj)
+				}
+
+		});
+			$.ajax({    
+				type: "GET",
+				url: "tot_amount",
+				dataType: "json",
+				data: { "code" : $("#code").val(), 
+					"paid_amount" :$("#paid_amount").val()
+			},
+				success: function(response){ 
+				 var obj = JSON.stringify(response);
+				 alert(obj)
+				 $("#value").html(obj)
 				}
 
 		});

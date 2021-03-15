@@ -1,0 +1,29 @@
+<div class="container">
+<%if @deposits.present?%>
+<h1>Deposits</h1>
+<table class="table">
+	<thead class="thead-dark">
+	<tr>
+		<!-- <th>Reference id</th> -->
+		<th>amount</th>
+		<th>status</th>
+		<!-- <th>Wallet amount</th> -->
+	</tr>
+	</thead>
+	<tbody>
+	<%@deposits.all.each do |deposit|%>
+		<tr>
+			<!-- <td><%#= deposit.reference_id%></td> -->
+			<td><%= deposit.amount%></td>
+			<td><%= deposit.status %></td>
+			<%if deposit.status =="pending"%>
+			<!-- <td><%#= deposit.wallet_amount%></td> -->
+			<td><%=link_to "delete request",deposits_destroy_path(:id=>deposit.id), method: :delete, remote: true %><%end%></td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>
+<%else%>
+<h4>There are no deposits present</h4>
+<%end%>
+</div>

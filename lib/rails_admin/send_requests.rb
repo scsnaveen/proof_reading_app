@@ -9,8 +9,8 @@ module RailsAdmin
 				register_instance_option :show_in_menu do
 					true 
 				end
-				# specific for post/Record
-				register_instance_option :member do
+				# specific for Request/Record
+				register_instance_option :collection do
 					true
 				end
 				#icon for SendRequests

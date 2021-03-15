@@ -5,6 +5,7 @@ class Admin < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :confirmable,:lockable,:timeoutable,:trackable
     has_one :wallet
+    has_many :transaction_histories
   	serialize :roles, Array
     def roles_enum
         [ 'Super Admin', 'Admin'  ]

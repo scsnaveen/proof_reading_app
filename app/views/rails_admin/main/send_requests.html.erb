@@ -10,7 +10,7 @@
 	<tbody>
 		<% @posts.all.each do |post|%>
 		<%if @request = Request.find_by_post_id(post.id).present?%>
-		<%else%>
+		<%elsif Payment.find_by("post_id = ? AND user_id = ?",post.id,post.user_id)%>
 			<tr>
 				<td><%= @id = post.id%></td>
 				<td><%=post.text%></td>

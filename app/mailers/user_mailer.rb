@@ -28,4 +28,15 @@ class UserMailer < ApplicationMailer
 		@admin =Admin.find(admin.id)
      	mail(:from =>"railschecking@gmail.com",:to=> @admin.email, subject: "New Post request")
 	end
+	# sending mail for completed proofreading payment amount 
+	def admin_payment_notify_email(payment)
+		@payment = Payment.find(payment.id)
+		@admin = Admin.find(@payment.admin_id)
+		mail(:from =>"railschecking@gmail.com",:to=>@admin.email,subject: "Paid for proof reading")
+	end
+	def fined_for_rejection(post)
+		@post = post.find(post.id)
+		@admin = Admin.find_by(:role =>"Super Admin")
+		mail(:from =>"railschecking@gmail.com",:to=>@admin.email,subject: "Paid for proof reading")
+	end
 end

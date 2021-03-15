@@ -12,6 +12,7 @@ class User < ApplicationRecord
 	has_one :wallet
 	has_many :posts
 	has_many :payments
+	has_many :deposits
 	# sending a welcome mail after the confirmation
 	def after_confirmation
 		UserMailer.welcome_email(self).deliver

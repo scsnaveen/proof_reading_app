@@ -57,7 +57,7 @@ RailsAdmin.config do |config|
     end
     send_requests do 
       visible do 
-        bindings[:abstract_model].model.to_s == "Post"
+        bindings[:abstract_model].model.to_s == "Request"
       end
     end
     accepted_requests do 

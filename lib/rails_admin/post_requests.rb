@@ -26,19 +26,22 @@ module RailsAdmin
 						@requests = Request.where(:accepted_admin=> nil) 
 						# @posts = Post.where(status: "pending") 
 						if request.post?|| request.put?
-							@requests = Request.where(accepted_admin:current_admin.id)
-							puts @requests.inspect
-							@requests.all.each do |r|
-								if  r.status !=nil.present?
-									@post = Post.find(params[:id])
-									@post.status = "reserved"
-									@request = Request.find_by(post_id:@post.id)
-									@request.accepted_admin = current_admin.id
-									@request.save
-									@post.save
-								else
-									redirect_to dashboard_path,error: "You already have pending tasks"
-								end
+							arr =[]
+							@requests = Request.where("accepted_admin = ?",current_admin.id)
+							@requests.all.each do |request|
+								arr <<request.status.blank?
+							end
+							if arr.include?(true)
+								flash[:error]= "You already have pending tasks"
+								redirect_to dashboard_path
+							else
+								@post = Post.find(params[:id])
+								@post.status = "reserved"
+								@request = Request.find_by(post_id:@post.id)
+								@request.accepted_admin = current_admin.id
+								@request.save
+								@post.save
+								
 							end
 						end
 					end#Proc.new do

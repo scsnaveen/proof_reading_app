@@ -53,6 +53,7 @@ module RailsAdmin
 						@post.status = "pending"
 						@post.save
 						@payment.save!
+						UserMailer.fined_for_rejection(@post).deliver
 					end
 					end
 					end#Proc.new do

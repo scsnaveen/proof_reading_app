@@ -1,4 +1,13 @@
-<%= form_with(model: @tranaction_history, url: transaction_histories_create_path(@tranaction_history), method: "post", remote: true) do |f| %>
-<%= f.text_field :amount%>
-<%= f.submit%>
-<%end%>
+<div class="container" >
+	<div class="container">
+  <div class="col-xs-12 text-right">   
+        <div class="next">
+          <h3>wallet balance:</h3><h5><%= current_admin.wallet.balance%></h5>
+        </div>
+    </div>
+	<h4>Please enter amount to withdraw from wallet</h4>
+	<%= form_with(model: @tranaction_history, url: transaction_histories_create_path(@tranaction_history), method: "post", remote: true) do |f| %>
+	<%= f.text_field :amount%>
+	<%= f.submit "Withdraw"%>
+	<%end%>
+</div>

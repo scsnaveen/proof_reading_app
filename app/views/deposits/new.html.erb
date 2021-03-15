@@ -1,0 +1,15 @@
+<div class ="container">
+	<h3>Request for deposit an amount</h3> 
+<%= form_with url: deposits_create_path, local: true  do |form| %>
+<br>
+<div class="field">
+	<%= form.label :amount %>
+	<%= form.text_field :amount %>
+	<%= form.submit "submit" %>
+
+</div>
+	<%= link_to 'Deposit History',deposits_index_path %>
+
+
+<% end %>
+</div>

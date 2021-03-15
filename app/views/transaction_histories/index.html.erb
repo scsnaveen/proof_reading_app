@@ -1,0 +1,20 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Reference id</th>
+      <th scope="col">admin id</th>
+      <th scope="col">withdraw amount</th>
+      <th scope="col">wallet balance</th>
+    </tr>
+  </thead>
+  <tbody>
+  	<%@transaction_histories.all.each do |transaction|%>
+    <tr>
+      <td><%=transaction.reference_id%></td>
+      <td><%=transaction.admin_id%></td>
+      <td><%=transaction.withdraw_amount%></td>
+      <td><%=transaction.current_wallet_amount%></td>
+    </tr>
+    <%end%>
+  </tbody>
+</table>

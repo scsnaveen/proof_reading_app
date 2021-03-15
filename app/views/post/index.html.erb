@@ -1,42 +1,42 @@
 <div class="container">
-  <div class="col-xs-12 text-right">   
-        <div class="next">
-          <%= link_to "New Post",post_new_path,class: "btn btn-lg btn-success"%>
-          </button>
-        </div>
-    </div>
+	<div class="col-xs-12 text-right">   
+				<div class="next">
+					<%= link_to "New Post",post_new_path,class: "btn btn-sm btn-success"%>
+					</button>
+				</div>
+		</div>
 <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Text</th>
-      <th scope="col">words</th>
-      <th scope="col">Status</th>
-      <th scope="col">Payment Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @posts.all.each do |post|%>
-    <tr>
-      <td><%=post.id%></td>
-      <td><%=post.text%></td>
-      <td><%=post.words%></td>
-      <td><%=post.status%></td>
-      <%payment = Payment.find_by(post_id: post.id)%>
-      <%if payment.present?%>
-      <td><%=payment.status%></td>
-      <%else%>
-        <td>pending</td>
-      <%end%>
-      <td><%=link_to "view",post_show_path(:id=>post.id)%></td>
-      <%if post.status=="completed"%>
-      <td><%=link_to "invoice",post_invoice_path(:id=>post.id)%></td>
-      <%end%>
-      <%if Payment.find_by(post_id:post.id).present?%>
-       <td><%=link_to "payment",payments_show_path(:post_id=>post.id)%></td>
-      <%end%>
-    </tr>
-    <%end%>
-  </tbody>
+	<thead class="thead-dark">
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Text</th>
+			<th scope="col">words</th>
+			<th scope="col">Status</th>
+			<th scope="col">Payment Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @posts.all.each do |post|%>
+		<tr>
+			<td><%=post.id%></td>
+			<td><%=post.text%></td>
+			<td><%=post.words%></td>
+			<td><%=post.status%></td>
+			<%payment = Payment.find_by("post_id = ? AND status!=?", post.id,"fined")%>
+			<%if payment.present?%>
+			<td><%=payment.status%></td>
+			<%else%>
+				<td>pending</td>
+			<%end%>
+			<td><%=link_to "view",post_show_path(:id=>post.id)%></td>
+			<%if post.status=="completed"%>
+			<td><%=link_to "invoice",post_invoice_path(:id=>post.id)%></td>
+			<%end%>
+			<%if payment.present?%>
+			 <td><%=link_to "payment",payments_show_path(:post_id=>post.id)%></td>
+			<%end%>
+		</tr>
+		<%end%>
+	</tbody>
 </table>
 </div>
