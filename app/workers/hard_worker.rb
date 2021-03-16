@@ -1,8 +1,7 @@
 class HardWorker
   include Sidekiq::Worker
-  	sidekiq_options :retry => false
 
-  def perform
+  def perform(*args)
     # Do something
   end
 end

@@ -1,45 +1,32 @@
-<div class="container">
-  <div class="row main">
-    <div class="panel-heading">
-      <div class="panel-title text-center">
-        <h1 class="title">Log in</h1>
-        <hr />
-      </div>
-    </div>
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-
-
-  <div class="form-group">
-    <%= f.label :email ,class: "cols-sm-2"%><br />
-    <div class="cols-sm-10">
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email",class: "form-control" %>
-      </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <%= f.label :password ,class: "cols-sm-2"%><br />
-    <div class="cols-sm-10">
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-        <%= f.password_field :password, autocomplete: "current-password",class: "form-control" %>
-      </div>
-    </div>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="form-check">
-      <%= f.check_box :remember_me ,class: "form-check-input"%>
-      <%= f.label :remember_me %>
-    </div>
-  <% end %>
-
-  <div class="form-group ">
-  <%= f.submit "Log in",class: "btn btn-primary btn-lg btn-block login-button" %>
-</div>
-<% end %>
-
-<%= render "users/shared/links" %>
-</div>
+<div id="login">
+	<h3 class="text-center text-white pt-5">Login </h3>
+	<div class="container">
+			<div id="login-row" class="row justify-content-center align-items-center">
+					<div id="login-column" class="col-md-6">
+							<div id="login-box" class="col-md-8">
+								<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+									<h3 class="text-center text-info">Login</h3>
+									<div class="form-group">
+											<label for="email" class="text-info">Email:</label><br>
+											<%= f.email_field :email, autofocus: true, autocomplete: "email",class: "form-control" %>
+									</div>
+									<div class="form-group">
+											<label for="password" class="text-info">Password:</label><br>
+											<%= f.password_field :password, autocomplete: "current-password",class: "form-control" %>
+									</div>
+										<% if devise_mapping.rememberable? %>
+									<div class="form-group">
+											<%= f.check_box :remember_me ,class: "form-check-input"%>
+											<label for="remember-me" class="text-info"><span>Remember me</span></label><br>
+												<% end %>
+											<%= f.submit "Log in",class: "btn btn-primary btn-lg btn-block login-button" %>
+									</div>
+									<div id="link" class="text-left">
+											<%= render "users/shared/links" %>
+									</div>
+									<% end %>
+							</div>
+					</div>
+			</div>
+	</div>
 </div>

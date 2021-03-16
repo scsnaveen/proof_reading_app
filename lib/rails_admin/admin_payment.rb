@@ -30,9 +30,14 @@ module RailsAdmin
 						@request = Request.find_by(post_id: @post.id)
 						@admin_wallet = Wallet.find_by(admin_id:@request.accepted_admin)
 						@super_admin_wallet =Wallet.find_by(:admin_id=>1)
+						loop do 
+							@payment_reference = ( "adminpayment" + [*(0..9)].sample(10).join.to_s )
+							break @payment_reference unless Payment.exists?(reference_id: @payment_reference)
+						end
 							@payment                        = Payment.new
-							@payment.admin_id                = Request.find_by(post_id: @post.id).accepted_admin
+							@payment.admin_id               = Request.find_by(post_id: @post.id).accepted_admin
 							@payment.post_id                = @post.id
+							@payment.reference_id           = @payment_reference
 							@payment.amount                 = @post.words * @post.per_word_amount
 							@payment.status                 = "pending"
 							@payment.paid_amount            = @payment.amount - 10
@@ -45,9 +50,19 @@ module RailsAdmin
 										@admin_wallet.save
 									end
 								end
+								loop do 
+									@transaction_reference = ( "adminpayment" + [*(0..9)].sample(10).join.to_s )
+									break @transaction_reference unless TransactionHistory.exists?(reference_id: @transaction_reference)
+								end
+								@transaction_history = TransactionHistory.new
+								@transaction_history.admin_id = current_admin.id
+								@transaction_history.reference_id = @transaction_reference
+								@transaction_history.status = "debited"
+								@transaction_history.current_wallet_amount = @admin_wallet.balance
+								@transaction_history.save
 							@payment.status = "success"
 							@payment.save
-						UserMailer.admin_payment_notify_email(@payment).deliver
+						AdminMailer.admin_payment_notify_email(@payment).deliver
 						end
 					end#Proc.new do
 				end

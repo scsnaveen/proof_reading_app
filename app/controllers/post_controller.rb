@@ -56,7 +56,7 @@ class PostController < ApplicationController
 	end
 	# using to calculate the total amount
 	def total_amount
-		@result = params[:words].to_i*params[:per_word_amount].to_f
+		@result = params[:words].to_i*PaymentCharge.first.per_word_amount
 		respond_to do |format|
 			format.html
 			format.json {render :json=>@result}
@@ -65,7 +65,7 @@ class PostController < ApplicationController
 	def invoice
 		@post = Post.find(params[:id])
 		@request= Request.find_by(post_id:@post.id)
-		@payment = Payment.where("user_id = ? AND post_id = ?",@post.user_id,@post.id)
+		@payment = Payment.find_by("user_id = ? AND post_id = ?",@post.user_id,@post.id)
 	end
 
 	def post_params

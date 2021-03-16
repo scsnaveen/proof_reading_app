@@ -1,5 +1,5 @@
 <%= rails_admin_form_for @post, url: proof_reading_path(@post, @post.id,model_name: Post), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
-<label id="minutes">00</label>:<label id="seconds">00</label>
+<label name="minutes" id="minutes">00</label>:<label id="seconds">00</label>
 <h4><%=@post.text%></h4>
 <% @request =Request.find_by(post_id: @post.id)%>
 
@@ -11,9 +11,11 @@
 			<div id="word-count-container">
 				<%= form.text_area :updated_text ,class: "form-control", :id => "no-of-words", :onkeydown=>"updatecount()",:rows =>"3" ,:cols =>"80"%>
 			</div>
+			<%= form.hidden_field :start_time, value: Time.now %>
+
 			<h4>number of words:<p id="word-count"></p></h4>
 			<%= form.submit "Post" ,class: "btn btn-primary btn-lg"%>
-			<%= link_to "Reject" ,rejecting_request_path(:id=>@post.id) ,class: "btn btn-primary btn-lg"%>
+			<%= link_to "Reject" ,rejecting_request_path(:id=>@post.id,:start_time=>params[:start_time]) ,class: "btn btn-primary btn-lg"%>
 		</div>
 	</div>
 </form>

@@ -34,7 +34,7 @@ module RailsAdmin
 							@request.save
 							Admin.all.each do |admin|
 								@admin =Admin.find(admin.id)
-								UserMailer.new_post_admin_notify_email(@admin,@request).deliver
+								AdminMailer.new_post_admin_notify_email(@admin,@request).deliver
 							end
 						end
 					end#Proc.new do

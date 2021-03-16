@@ -7,11 +7,16 @@
 			<h3>Enter a text </h3>
 			<div id="word-count-container">
 			<%= f.text_area :text ,class: "form-control", :id => "no-of-words", :keyup=>"updatecount()"%>
-			<%= f.hidden_field :per_word_amount,:id=>"word_amount"%>
 			</div>
-			<h4>number of words:<p id="word-count"></p></h4>
-			<h4>Amount:<p id="result"></p></h4>
-			<%= f.submit "Submit" ,class: "btn btn-primary btn-lg"%>
+			<div class="col-md-6">
+				<h4>number of words:<span id="word-count"></span></h4>
+			</div>
+			<div class="col-md-2">
+				<h4>Amount(₹):<span id="result"></span></h4>
+			</div>
+			<div class="col-md-8">
+				<%= f.submit "Submit" ,class: "btn btn-primary btn-lg"%>
+			</div>
 		<% end %>
 		</div>
 	</div>
@@ -23,22 +28,22 @@
 <script type="text/javascript">
 	
  $(document).keyup(function() {
-     var wordCount = $("#no-of-words").val().split(' ').length;    
-     $("#word-count").html(wordCount);
+	 var wordCount = $("#no-of-words").val().split(' ').length;    
+	 $("#word-count").html(wordCount);
 
-      $.ajax({    
-        type: "GET",
-        url: "total_amount",
-        dataType: "json",
-        data: { "per_word_amount": $("#word_amount").val(),
-        "words": $("#no-of-words").val().split(' ').length
-         },
-        success: function(response){ 
+	  $.ajax({    
+		type: "GET",
+		url: "total_amount",
+		dataType: "json",
+		data: { 
+		"words": $("#no-of-words").val().split(' ').length
+		 },
+		success: function(response){ 
 			var obj = JSON.stringify(response);
-         $("#result").html(obj)     
-        }
+		 $("#result").html(obj)     
+		}
 
-    });
+	});
 });
 
 </script>

@@ -1,3 +1,3 @@
 class TransactionHistory < ApplicationRecord
-	belongs_to :admin
+	belongs_to :admin,optional: true
 end

@@ -33,6 +33,7 @@ Rails.application.routes.draw do
 	get 'deposits/index'
 	get 'payments/tot_amount'
 	delete 'deposits/destroy'
+	get 'payments/admin_payment_histories'
 	resources :coupons
 
 	devise_for :users, controllers: { 

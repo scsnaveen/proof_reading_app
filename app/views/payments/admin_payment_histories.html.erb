@@ -1,0 +1,20 @@
+<div class="container">
+	<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">admin id</th>
+      <th scope="col">paid_amount</th>
+      <th scope="col">status</th>
+    </tr>
+  </thead>
+  <tbody>
+  	<% @payments.all.each do |payment|%>
+    <tr>
+      <td><%= payment.admin_id%></td>
+      <td><%= payment.paid_amount%></td>
+      <td><%= payment.status%></td>
+    </tr>
+    <%end%>
+  </tbody>
+</table>
+

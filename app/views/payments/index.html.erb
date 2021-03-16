@@ -1,0 +1,23 @@
+<table class="table">
+	<thead class="thead-dark">
+		<tr>
+			<th scope="col">Reference Id</th>
+			<th scope="col">amount</th>
+			<th scope="col">discount</th>
+			<th scope="col">Paid </th>
+			<th scope="col">Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		<%@payments.all.each do |payment|%>
+		<tr>
+			<td><%= payment.reference_id%></td>
+			<td><%= payment.amount%></td>
+			<td><%= payment.discount_amount%></td>
+			<td><%= payment.paid_amount%></td>
+			<td><%= payment.status%></td>
+			<td><%= link_to "show",payments_show_path(:post_id=>payment.post_id)%></td>
+		</tr>
+		<%end%>
+	</tbody>
+</table>

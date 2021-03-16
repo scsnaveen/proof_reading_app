@@ -32,15 +32,15 @@
 												<tr>
 														<td class="col-md-4"><em><%=@post.text%></em></h4></td>
 														<td class="col-md-1 text-center"><%=@post.words%></td>
-														<td class="col-md-1 text-center"><%=@post.per_word_amount.to_f%></td>
-														<td class="col-md-1 text-center"><%=@post.words * @post.per_word_amount.to_f%></td>
+														<td class="col-md-1 text-center"><%=PaymentCharge.first.per_word_amount%></td>
+														<td class="col-md-1 text-center"><%=@post.words * PaymentCharge.first.per_word_amount%></td>
 
 												</tr>
 												<tr>
 														<td>   </td>
 														<td>   </td>
 														<td class="text-right">Total: </td>
-														<td class="text-center text-danger"><h4><strong><%=@post.words * @post.per_word_amount.to_f%></strong></h4></td>
+														<td class="text-center text-danger"><h4><strong><%=@post.words * PaymentCharge.first.per_word_amount%></strong></h4></td>
 												</tr>
 												<tr>
 													<td>

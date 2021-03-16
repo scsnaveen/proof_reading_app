@@ -11,7 +11,7 @@
     <% @requests.all.each do |f|%> 
     <tr>
       <% if !current_admin.id.in? f.rejected_admin%>
-       <td><%= @id = f.post_id%></td>
+       <td><%=  f.id%></td><%@id =f.post_id%>
         <% user_text = Post.find_by(:id=>f.post_id)%>
         <td><%= user_text.text%></td>
       <td><%=user_text.words%></td>

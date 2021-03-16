@@ -26,14 +26,19 @@ module RailsAdmin
 						@request = Request.find_by(post_id: @post.id)
 						if request.post?
 						@post = Post.find(params[:id])
-						@payment = Payment.new()
-						@payment.admin_id = current_admin.id
-						@payment.amount = 25
-						@payment.status = "fined"
-						@payment.post_id = @post.id
-						@payment.paid_amount = 25
+						loop do 
+							@payment_reference = ( "fine" + [*(0..9)].sample(10).join.to_s )
+							break @payment_reference unless Payment.exists?(reference_id: @payment_reference)
+						end
+						@payment               = Payment.new()
+						@payment.admin_id      = current_admin.id
+						@payment.amount        = 25
+						@payment.reference_id  = @payment_reference
+						@payment.status        = "fined"
+						@payment.post_id       = @post.id
+						@payment.paid_amount   = 25
 						@rejected_admin_wallet = Wallet.find_by(admin_id: current_admin.id)
-						@admin_wallet =Wallet.find_by(:admin_id=>1)
+						@admin_wallet          = Wallet.find_by(:admin_id=>1)
 						if @rejected_admin_wallet.balance < @payment.amount
 							redirect_to payments_new_path(:id=> @post.id),alert: "There is no sufficient money"
 						else
@@ -53,7 +58,7 @@ module RailsAdmin
 						@post.status = "pending"
 						@post.save
 						@payment.save!
-						UserMailer.fined_for_rejection(@post).deliver
+						AdminMailer.fined_for_rejection(@post).deliver
 					end
 					end
 					end#Proc.new do

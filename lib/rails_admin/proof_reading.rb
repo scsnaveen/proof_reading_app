@@ -31,10 +31,10 @@ module RailsAdmin
 							@post = Post.find(params[:id])
 							params[:start_time] =Time.now
 							@start_time =Time.now
-							puts params[:start_time].inspect
-							session[:start_time] =Time.now
+							@var1  = params[:start_time]
+							puts @var1.inspect
 							if request.post? || request.put?
-								puts session[:start_time].inspect
+								puts @var1.inspect
 								console.log(minutes)
 								@post.status = "edited"
 								@request.time_taken = Time.now - @start_time
