@@ -1,5 +1,6 @@
 class PaymentsController < ApplicationController
-	before_action :authenticate_user!
+	before_action :authenticate_user!,except: [:admin_payments]
+	before_action :authenticate_admin! ,only: [:admin_payments]
 	def index
 		@payments = current_user.payments
 	end
@@ -27,7 +28,7 @@ class PaymentsController < ApplicationController
 				@payment                        = Payment.new
 				@payment.user_id                = @post.user_id
 				@payment.post_id                = @post.id
-				@payment.amount                 = @post.words * PaymentCharge.first.per_word_amount
+				@payment.amount                 = @post.words * @post.per_word_amount
 				@payment.status                 = "pending"
 				@payment.reference_id           = @payment_reference
 				# checking if coupon is present  
@@ -46,12 +47,12 @@ class PaymentsController < ApplicationController
 						redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has been expired "
 						return
 					else
-						@payment.discount_id            = @coupon.id rescue nil
-						@payment.discount_amount        = @coupon.amount rescue nil
-						@payment.paid_amount            = @payment.amount - @payment.discount_amount
+						@payment.discount_id            = @coupon.id 
+						@payment.discount_amount        = @coupon.amount 
+						@payment.paid_amount            = @payment.amount - @payment.discount_amount + PaymentCharge.first.gst
 					end
 				else
-					@payment.paid_amount = @payment.amount
+					@payment.paid_amount = @payment.amount + PaymentCharge.first.gst
 				end
 					@user_wallet.transaction do
 						@user_wallet.with_lock do 
@@ -89,26 +90,31 @@ class PaymentsController < ApplicationController
 	end
 	# coupon verification if coupon is present or not
 	def coupon_verification
-		@result =nil
+		@result = "not"
 		if params[:code].present?
 			coupon =Coupon.find_by("code = ?",params[:code])
 			if coupon.present?
 				@result = coupon.amount
+			else
+				@result = "Not a valid coupon"
 			end
 		end
 		respond_to do |format|
-    		format.html
-    		format.json {render :json=>@result}
-  		end
+			format.html
+			format.json {render :json=>@result}
+		end
 	end
 	def tot_amount
-		puts @result.inspect
-		puts params[:amount].inspect
-		value = params[:amount]- @result
-		respond_to do |format|
-    		format.html
-    		format.json {render :json=>value}
-  		end
+		# @post = Post.find(params[:id])
+		# puts @post.inspect
+		coupon =Coupon.find_by("code = ?",params[:code])
+		# puts params[:post_id].inspect
+		# puts params[:amount].inspect
+		# puts params[:id].inspect
+		# respond_to do |format|
+		# 	format.html
+		# 	format.json {render :json=>value}
+		# end
 	end
 	def extra_payment
 		@post = Post.find(params[:id])
@@ -159,7 +165,7 @@ class PaymentsController < ApplicationController
 	def show 
 		@payment = Payment.find_by(post_id:params[:post_id])
 	end
-	def admin_payment_histories
+	def admin_payments
 		@payments = Payment.where(admin_id: current_admin.id)
 	end
 end

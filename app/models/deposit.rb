@@ -5,6 +5,9 @@ class Deposit < ApplicationRecord
 	def update_balance
 		@wallet = self.user.wallet
 		if self.status=="approved"
+			@transaction_history =TransactionHistory.find_by(reference_id:self.deposit_reference)
+			@transaction_history.status = "credited"
+			@transaction_history.save
 			@wallet.transaction do
 				@wallet.with_lock do 
 					@wallet.balance = @wallet.balance+self.amount 

@@ -29,11 +29,13 @@
 				<td>pending</td>
 			<%end%>
 			<td><%=link_to "view",post_show_path(:id=>post.id)%></td>
+			<td>
 			<%if post.status=="completed"%>
-			<td><%=link_to "invoice",post_invoice_path(:id=>post.id)%></td>
+			<%=link_to "invoice",post_invoice_path(:id=>post.id)%></td>
 			<%end%>
+			<td>
 			<%if payment.present?%>
-			 <td><%=link_to "payment",payments_show_path(:post_id=>post.id)%></td>
+			 <%=link_to "payment",payments_show_path(:post_id=>post.id)%></td>
 			<%end%>
 		</tr>
 		<%end%>

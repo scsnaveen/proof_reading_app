@@ -1,7 +1,7 @@
 class PostController < ApplicationController
 	before_action :authenticate_user!
 	def index
-		@posts = current_user.posts
+		@posts = current_user.posts.order( 'id ASC' )
 	end
 
 	def new
@@ -62,6 +62,7 @@ class PostController < ApplicationController
 			format.json {render :json=>@result}
 		end
 	end
+	# invoice for the post
 	def invoice
 		@post = Post.find(params[:id])
 		@request= Request.find_by(post_id:@post.id)

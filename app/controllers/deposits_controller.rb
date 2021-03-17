@@ -11,29 +11,30 @@ class DepositsController < ApplicationController
 			redirect_to deposits_new_path
 			flash[:alert] ="You have pending request, please wait for some time"
 		else
-			deposit = Deposit.new
-			deposit.amount = params[:amount]
-			deposit.status = "pending"
-			deposit.user_id =current_user.id
-			deposit.save
-			redirect_to deposits_new_path
-			flash[:notice] ="Successfully Requested deposit"
 			loop do 
 				@transaction_reference = ( "deposit" + [*(0..9)].sample(10).join.to_s )
 				break @transaction_reference unless TransactionHistory.exists?(reference_id: @transaction_reference)
 			end
+			deposit = Deposit.new
+			deposit.amount = params[:amount]
+			deposit.status = "pending"
+			deposit.user_id =current_user.id
+			deposit.deposit_reference =@transaction_reference
+			deposit.save
+			redirect_to deposits_new_path
+			flash[:notice] ="Successfully Requested deposit"
+			
 			@transaction_history = TransactionHistory.new()
 			@transaction_history.user_id = current_user.id
 			@transaction_history.reference_id = @transaction_reference
 			@transaction_history.status = "pending"
-			@transaction_history.current_wallet_amount = @user_wallet.balance
+			@transaction_history.current_wallet_amount = current_user.wallet.balance
 			@transaction_history.save
 		end
 	end
 
 	def update
 		@deposit = Deposit.find(params[:id])
-		# @transaction_history = TransactionHistory.find_by(reference_id:)
 		if status.present?
 			@deposit.status = "approved"
 			@deposit.save

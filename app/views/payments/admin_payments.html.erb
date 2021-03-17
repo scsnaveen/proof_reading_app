@@ -3,6 +3,7 @@
   <thead>
     <tr>
       <th scope="col">admin id</th>
+      <th scope="col">post id</th>
       <th scope="col">paid_amount</th>
       <th scope="col">status</th>
     </tr>
@@ -11,6 +12,7 @@
   	<% @payments.all.each do |payment|%>
     <tr>
       <td><%= payment.admin_id%></td>
+      <td><%= payment.post_id%></td>
       <td><%= payment.paid_amount%></td>
       <td><%= payment.status%></td>
     </tr>

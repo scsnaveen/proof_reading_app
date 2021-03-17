@@ -32,19 +32,19 @@
 												<tr>
 														<td class="col-md-4"><em><%=@post.text%></em></h4></td>
 														<td class="col-md-1 text-center"><%=@post.words%></td>
-														<td class="col-md-1 text-center"><%=PaymentCharge.first.per_word_amount%></td>
-														<td class="col-md-1 text-center"><%=@post.words * PaymentCharge.first.per_word_amount%></td>
+														<td class="col-md-1 text-center"><%=@post.per_word_amount.to_f%></td>
+														<td class="col-md-1 text-center"><span id ="amount"><%=@post.words * @post.per_word_amount.to_f %></span></td>
 
 												</tr>
 												<tr>
 														<td>   </td>
 														<td>   </td>
 														<td class="text-right">Total: </td>
-														<td class="text-center text-danger"><h4><strong><%=@post.words * PaymentCharge.first.per_word_amount%></strong></h4></td>
+														<td class="text-center text-danger"><h4><strong><%=@post.words * @post.per_word_amount.to_f%></strong></h4></td>
 												</tr>
 												<tr>
 													<td>
-														<%= form.hidden_field :post_id => @post.id%>
+														<%= form.hidden_field :post_id,:id => "amount"%>
 													<%=form.label :coupon_code%>
 													<%= form.text_field :coupon_code,:id => "code",:keyup=>"total_amount()" %></td>
 													<td>
@@ -77,17 +77,17 @@
 				}
 
 		});
+			var id = "document.getElementById('<%=@post.id%>').innerHTML"
 			$.ajax({    
 				type: "GET",
 				url: "tot_amount",
 				dataType: "json",
-				data: { "code" : $("#code").val(), 
-					"paid_amount" :$("#paid_amount").val()
+				data: { "code" : $("#code").val(),
+				"amount" : $("#amount").val()
 			},
 				success: function(response){ 
 				 var obj = JSON.stringify(response);
-				 alert(obj)
-				 $("#value").html(obj)
+				 $("#paid_amount").html(obj)
 				}
 
 		});

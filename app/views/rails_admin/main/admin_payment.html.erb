@@ -1,9 +1,9 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">post id</th>
-      <th scope="col">admin id</th>
-      <th scope="col">words</th>
+      <th scope="col">Post id</th>
+      <th scope="col">Admin username</th>
+      <th scope="col">Words</th>
     </tr>
   </thead>
   <tbody>
@@ -11,7 +11,8 @@
     <%if !Payment.where("admin_id=? AND post_id=?",Request.find_by(post_id:post.id).accepted_admin,post.id).present?%>
     <tr>
       <td><%= post.id%></td>
-      <td><%= Request.find_by(post_id:post.id).accepted_admin%></td>
+      <% @request = Request.find_by(post_id:post.id)%>
+      <td><%= Admin.find(@request.accepted_admin).user_name%></td>
       <td><%= post.words%></td>
       <td><%=link_to "pay",admin_payment_path(:id=>post.id),method: :post%></td>
     </tr>

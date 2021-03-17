@@ -23,22 +23,24 @@ module RailsAdmin
 					true
 				end
 				register_instance_option :http_methods do
-					[:get, :put]
+					[:get,:put, :post]
 				end
 				register_instance_option :controller do
 					Proc.new do
 						if @request =Request.find_by(:accepted_admin=>current_admin)
+							if request.get?
 							@post = Post.find(params[:id])
-							params[:start_time] =Time.now
-							@start_time =Time.now
-							@var1  = params[:start_time]
-							puts @var1.inspect
+							@request.start_time =Time.now
+							@request.save
+						end
 							if request.post? || request.put?
-								puts @var1.inspect
-								console.log(minutes)
+								@post = Post.find(params[:id])
+								@request = Request.find_by(post_id: @post.id)
+								end_time =Time.now.to_i
+								time = end_time.to_i - @request.start_time.to_i
 								@post.status = "edited"
-								@request.time_taken = Time.now - @start_time
-								@request.update_attributes(params.permit(:time_taken))
+								@request.time_taken = time
+								@request.save
 								@post.update_attributes(params.require(:post).permit(:updated_text,:status))
 								redirect_to dashboard_path
 								UserMailer.user_notify_email(@post.user_id).deliver

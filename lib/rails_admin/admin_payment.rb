@@ -13,7 +13,7 @@ module RailsAdmin
 				end
 				#icon for AdminPayment
 				register_instance_option :link_icon do
-					'fa fa-exclamation'
+					'fa fa-inr'
 				end
 				#pjax to false because we don't need pjax for this action
 				register_instance_option :pjax? do
@@ -38,9 +38,9 @@ module RailsAdmin
 							@payment.admin_id               = Request.find_by(post_id: @post.id).accepted_admin
 							@payment.post_id                = @post.id
 							@payment.reference_id           = @payment_reference
-							@payment.amount                 = @post.words * @post.per_word_amount
+							@payment.amount                 = @post.words * PaymentCharge.first.per_word_amount
 							@payment.status                 = "pending"
-							@payment.paid_amount            = @payment.amount - 10
+							@payment.paid_amount            = @payment.amount. - PaymentCharge.first.gst
 								@admin_wallet.transaction do
 									@admin_wallet.with_lock do 
 										@super_admin_wallet.balance = @super_admin_wallet.balance -  @payment.paid_amount 
