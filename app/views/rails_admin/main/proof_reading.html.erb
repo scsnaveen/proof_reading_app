@@ -1,7 +1,13 @@
-<%= rails_admin_form_for @post, url: proof_reading_path(@post, @post.id,model_name: Post), as: @abstract_model.param_key, html: { method: "post", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
-<label name="minutes" id="minutes">00</label>:<label id="seconds">00</label>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>
+
+<%= rails_admin_form_for @post, url: proof_reading_path(@post, @post.id,model_name: Post), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
+
 <h4><%=@post.text%></h4>
 <% @request =Request.find_by(post_id: @post.id)%>
+<% t = @request.time_taken%>
+<h5>Previous time taken <%="%02d:%02d:%02d" % [t/3600%24, t/60%60, t%60]%></h5>
+<h5>Present time</h5><div id="basicUsage">00:00:00</div>
 
 <br>
 <div class="container" >
@@ -9,7 +15,7 @@
 	<div class="row">
 		<div class="cols-md-8">
 			<div id="word-count-container">
-				<%= form.text_area :updated_text ,class: "form-control", :id => "no-of-words", :onkeydown=>"updatecount()",:rows =>"3" ,:cols =>"80"%>
+				<%= form.text_area :updated_text ,class: "form-control", :id => "no-of-words",:keyup=>"startButton",:rows =>"3" ,:cols =>"80"%>
 			</div>
 			
 
@@ -23,49 +29,62 @@
 <%end%>
 <script type="text/javascript">
 	
-	function updatecount(){
-	var wordCount = $("#no-of-words").val().split(' ').length;
-	$("#word-count").html(wordCount);	
-	};
+// 	function updatecount(){
+// 	var wordCount = $("#no-of-words").val().split(' ').length;
+// 	$("#word-count").html(wordCount);	
+// 	};
 
-var minutesLabel = document.getElementById("minutes");
-var secondsLabel = document.getElementById("seconds");
-var totalSeconds = 0;
-setInterval(setTime, 1000);
 
-function setTime() {
-  ++totalSeconds;
-  secondsLabel.innerHTML = pad(totalSeconds % 60);
-  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-}
+// $(document).keyup(function() {
+// $.ajax({
+//     url: 'proof_reading',
+//     method: 'GET',
+//     dataType: "JSON",
+//     start_time: new Date().getTime(),
+//     data: {"start_time" :$("#start_time").val()},
+//     complete: function(data) {
+//     	var obj = JSON.stringify(data);
+// 		$("#result").html(obj)
+//         alert('This request took '+(new Date().getTime() - this.start_time)+' ms');
+//     }
+// });
+// });
+  var timer = new Timer();
+  timer.start();
+  timer.addEventListener('secondsUpdated', function(e) {
+      $('#basicUsage').html(timer.getTimeValues().toString());
+  });
+  
+// var timer = new Timer();
 
-function pad(val) {
-  var valString = val + "";
-  if (valString.length < 2) {
-    return "0" + valString;
-  } else {
-    return valString;
-  }
-}
-var start_time = new Date().getTime();
+// $('#chronoExample .startButton').keyup(function() {
+//     timer.start();
+// });
 
-jQuery.get('your-url', data, function(data, status, xhr) {
-        var request_time = new Date().getTime() - start_time;
-});
-$(document).keyup(function() {
-$.ajax({
-    url: 'proof_reading',
-    method: 'GET',
-    dataType: "JSON",
-    start_time: new Date().getTime(),
-    data: {"start_time" :$("#start_time").val()},
-    complete: function(data) {
-    	var obj = JSON.stringify(data);
-		$("#result").html(obj)
-        alert('This request took '+(new Date().getTime() - this.start_time)+' ms');
-    }
-});
-});
+// $('#chronoExample .pauseButton').click(function () {
+//     timer.pause();
+// });
+
+// $('#chronoExample .stopButton').click(function () {
+//     timer.stop();
+// });
+
+// $('#chronoExample .resetButton').click(function () {
+//     timer.reset();
+// });
+
+// timer.addEventListener('secondsUpdated', function (e) {
+//     $('#chronoExample .values').html(timer.getTimeValues().toString());
+// });
+
+// timer.addEventListener('started', function (e) {
+//     $('#chronoExample .values').html(timer.getTimeValues().toString());
+// });
+
+// timer.addEventListener('reset', function (e) {
+//     $('#chronoExample .values').html(timer.getTimeValues().toString());
+// });
+
 
 
 </script>
