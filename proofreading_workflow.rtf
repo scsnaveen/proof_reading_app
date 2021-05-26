@@ -1,0 +1,29 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c13333\c13333\c13333;\cssrgb\c100000\c100000\c100000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh15340\viewkind0
+\deftab720
+\pard\pardeftab720\sl240\partightenfactor0
+
+\f0\fs70 \cf2 \cb3 \expnd0\expndtw0\kerning0
+Workflow for Proof Reading application\
+User\
+1.Creating the user and admin management \
+2.User authentication before giving proof read text to  get correction\
+3.User enters a post for the proof reading text in the given field\
+4.adding the coupons \
+5.User will be redirected to the payment page and add coupon before payment\
+6.After the payment  the proofreading post will be in pending state and the amount will be in locked state\
+Admin\
+1.Creating a roles admin, proofreader in admin management\
+2.Creating a table for dynamic  values for per word cost, commission percentage and fine percentage\
+3.Creating the coupon in percentages  \
+4.Creating a custom action for super admin sent the post requests to the proof readers who are not busy \
+5. creating a custom action for post acceptation .Proof reader who accepts the request first will be assigned to him\
+6.creating a custom actor for rejection. If rejects after the acceptation he will be fined and the request will be sent to others who are not busy\
+7.creating a custom action for performing proof reading.For a post proof reading is performed in the admin panel\
+8.While proof reading the timer starts\
+9.After the approval of the user the hold amount will be sent to proof reader with deducting the commission amount and the commission amount will be sent to admin\
+10.Creating a invoice for completed proof reading jobs \
+}
