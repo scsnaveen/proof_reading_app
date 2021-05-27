@@ -25,7 +25,7 @@
     <ul class="nav navbar-nav pull-right">
     	<%if current_user.present?%>
 				<li>
-					<a class="nav-link active" href="#">
+					<a class="nav-link active" href="/users/edit">
 					<%= current_user.user_name.capitalize %></a>
 				</li>
 				<li>
@@ -49,6 +49,3 @@
     </ul>
   </div>
 </nav>
-<br>
-<br>
-<br>

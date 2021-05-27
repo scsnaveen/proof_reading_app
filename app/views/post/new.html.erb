@@ -28,7 +28,7 @@
 <script type="text/javascript">
 	
  $(document).keyup(function() {
-	 var wordCount = $("#no-of-words").val().split(' ').length;    
+	 var wordCount = $("#no-of-words").val().trim().split(/\s+/).length;
 	 $("#word-count").html(wordCount);
 
 	  $.ajax({    

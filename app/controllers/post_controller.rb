@@ -12,6 +12,7 @@ class PostController < ApplicationController
 		@post = Post.new(post_params)
 		@post.user_id = current_user.id
 		@post.words = @post.text.split(' ').size
+		@post.per_word_amount =PaymentCharge.first.per_word_amount
 		@post.save
 		redirect_to payments_new_path(:id=>@post.id),notice: "Your post has been successfully saved"		
 	end
@@ -56,7 +57,7 @@ class PostController < ApplicationController
 	end
 	# using to calculate the total amount
 	def total_amount
-		@result = params[:words].to_i*PaymentCharge.first.per_word_amount
+		@result = (params[:words].to_i*PaymentCharge.first.per_word_amount).to_i
 		respond_to do |format|
 			format.html
 			format.json {render :json=>@result}

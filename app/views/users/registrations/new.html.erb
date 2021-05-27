@@ -1,91 +1,69 @@
 <div class="container">
-	<div class="row">
-		<div class="Absolute-Center is-Responsive">
-			<div id="logo-container"></div>
-			<div class="col-sm-6 col-md-6 col-md-offset-1">
-				<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-					<%= render "users/shared/error_messages", resource: resource %>
-					
-
-					<div class="form-group">
-						<%= f.label :email ,class: "cols-sm-2"%><br />
-						<div class="cols-sm-4">
-							<div class="input-group">
-								<span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-								<%= f.email_field :email, autofocus: true, autocomplete: "email",class: "form-control" %>
-							</div>
+	<div class="row-auto">
+		<div class="col-md-6 mx-auto mb-5">
+<div class="card" style="width: 24rem;">
+	<div class="card-body">
+		<h5 class="card-title">Sign up</h5>
+		<p class="card-text">
+			<%= form_for(resource, as: resource_name, url: registration_path(resource_name),:html=> {:multipart=>true}) do |f| %>
+				<%= render "users/shared/error_messages", resource: resource %>
+				<div class="row">
+					<div class="col-6">
+						<div class="field form-group">
+							<%= f.text_field :first_name,autofocus: true,class:"form-control",placeholder:"First name"%>
 						</div>
 					</div>
-					<div class="form-group">
-						<%= f.label :password ,class: "cols-sm-2"%><br />
-						<div class="cols-sm-10">
-							<div class="input-group">
-								<span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-								<%= f.password_field :password, autocomplete: "new-password",class: "form-control" %>
-							</div>
-						</div>
-						<% if @minimum_password_length %>
-								<em>(<%= @minimum_password_length %> characters minimum)</em>
-								<% end %><br />
-					</div>
-
-				<div class="form-group">
-						<%= f.label :password_confirmation ,class: "cols-sm-2"%><br />
-						<div class="cols-sm-10">
-							<div class="input-group">
-								<span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-								<%= f.password_field :password_confirmation, autocomplete: "new-password",class: "form-control" %>
-							</div>
+					<div class="col-6">
+						<div class="field form-group">
+							<%= f.text_field :last_name,class:"form-control",placeholder:"Last name"%>
 						</div>
 					</div>
-					<div class="form-group">
-						<%= f.label :first_name ,class: "cols-sm-2"%><br />
-						<div class="cols-sm-10">
-							<div class="input-group">
-							 <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-								<%= f.text_field :first_name, autocomplete: "new-password",class: "form-control" %>
-							</div>
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<%= f.label :last_name ,class: "cols-sm-2"%><br />
-						<div class="cols-sm-10">
-							<div class="input-group">
-							 <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-								<%= f.text_field :last_name, autocomplete: "new-password",class: "form-control" %>
-							</div>
-						</div>
-					</div>
-
-				<div class="form-group">
-						<%= f.label :user_name ,class: "cols-sm-2"%><br />
-						<div class="cols-sm-10">
-							<div class="input-group">
-								<span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-								<%= f.text_field :user_name, autocomplete: "new-password",class: "form-control" %>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<%= f.label :phone_number ,class: "cols-sm-2"%><br />
-						<div class="cols-sm-10">
-							<div class="input-group">
-								<span class="input-group-addon"><i class="fa fa-phone fa" aria-hidden="true"></i></span>
-								<%= f.text_field :phone_number, autocomplete: "new-password",class: "form-control" %>
-							</div>
-						</div>
-					</div>
-
-				<div class="form-group ">
-					<%= f.submit "Sign up",class: "btn btn-primary btn-lg btn-block login-button" %>
 				</div>
-					
-				<% end %>
-
-				<%= render "users/shared/links" %>
+				<div class="field form-group">
+					<%= f.text_field :user_name,class:"form-control",placeholder:"User name"%>
 				</div>
-			</div>
-		</div>
+
+				<div class="field form-group">
+					<% f.label :email %>
+					<%= f.email_field :email,class:"form-control",placeholder:"Email",  autocomplete: "email" %>
+				</div>
+
+				<div class="field form-group">
+					<% f.label :password %>
+					<% if @minimum_password_length %>
+					<em>(<%= @minimum_password_length %> characters minimum)</em>
+					<% end %>
+					<%= f.password_field :password, autocomplete: "new-password",class:"form-control",placeholder:"Password" %>
+				</div>
+
+				<div class="field form-group">
+					<% f.label :password_confirmation %>
+					<%= f.password_field :password_confirmation, autocomplete: "new-password",class:"form-control",placeholder:"Confirm password" %>
+				</div>
+
+				<div class="field form-group">
+					<%= f.text_field :phone_number,class:"form-control",placeholder:"Phone number"%>
+				</div>
+
+				<div class="actions">
+					<%= f.submit "Sign up" %>
+				</div>
+			<% end %>
+
+			<%= render "users/shared/links" %>
+
+		</p>
 	</div>
 </div>
+</div>
+</div>
+</div>
+<style type="text/css">
+body{
+background-image: url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');
+background-size: cover;
+background-repeat: no-repeat;
+height: 100%;
+font-family: 'Numans', sans-serif;
+}
+</style>

@@ -1,12 +1,13 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>
 
 <%= rails_admin_form_for @post, url: proof_reading_path(@post, @post.id,model_name: Post), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
 
 <h4><%=@post.text%></h4>
 <% @request =Request.find_by(post_id: @post.id)%>
+<%if @request.time_taken.present?%>
 <% t = @request.time_taken%>
 <h5>Previous time taken <%="%02d:%02d:%02d" % [t/3600%24, t/60%60, t%60]%></h5>
+<%end%>
 <h5>Present time</h5><div id="basicUsage">00:00:00</div>
 
 <br>

@@ -30,20 +30,22 @@ module RailsAdmin
 						if @request =Request.find_by(:accepted_admin=>current_admin)
 							if request.get?
 							@post = Post.find(params[:id])
+							@request = Request.find_by(post_id: @post.id)
 							@request.start_time =Time.now
 							@request.save
 						end
 							if request.post? || request.put?
 								@post = Post.find(params[:id])
 								@request = Request.find_by(post_id: @post.id)
-								end_time =Time.now.to_i
-								time = end_time.to_i - @request.start_time.to_i
+								end_time =Time.now.to_formatted_s(:number)
+								start_time = @request.start_time.to_formatted_s(:number)
+								time = end_time.to_i - start_time.to_i
 								@post.status = "edited"
-								@request.time_taken = time
-								@request.save
+								@request.time_taken += time
+								@request.update_attributes(params.permit(:time_taken))
 								@post.update_attributes(params.require(:post).permit(:updated_text,:status))
 								redirect_to dashboard_path
-								UserMailer.user_notify_email(@post.user_id).deliver
+								# UserMailer.user_notify_email(@post.user_id).deliver
 							end
 						end
 						

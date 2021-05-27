@@ -1,30 +1,23 @@
-<br/><br/><br/>
-<section id="plans">
-	<div class="container">
-		<div class="row">
-		<% Coupon.all.each do |coupon|%>
+<div class="container">
+	<div class="row">
+<% Coupon.all.each do |coupon|%>
 
 		<%if DateTime.now.between?(coupon.valid_from,coupon.valid_until)%>
-		<%if coupon.redemption_limit != coupon.coupon_redemptions_count%>
-			<div class="col-md-4 text-center">
-				<div class="panel panel-danger panel-pricing">
-					<div class="panel-heading">
-						<i class="fa fa-desktop"></i>
-						<h3>CODE:<%= coupon.code%></h3>
-					</div>
-					<div class="panel-body text-center">
-						<p><strong>AMOUNT:<%= coupon.amount%></strong></p>
-					</div>
-					<h3><%= coupon.description%></h3>
-					<div class="panel-footer">
-						<p><strong>VALID FROM: <%= coupon.valid_from%> TO 
-						<%= coupon.valid_until%></strong></p>  
-					</div>
-				</div>
-			</div>
-		<%end%>
-		<%end%> 
-		<%end%>
-		</div>
-	</div>
-</section>
+		<div class="col-6">
+<div class="card text-center">
+  <div class="card-header">
+    CODE:<%= coupon.code%>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">UPTO  <%= coupon.amount%>%</h5>
+    <p class="card-text"><%= coupon.description%></p>
+  </div>
+  <div class="card-footer text-muted">
+    VALID FROM: <%= coupon.valid_from%> TO <%= coupon.valid_until%>
+  </div>
+</div>
+</div>
+<%end%>
+<%end%>
+</div>
+</div>

@@ -1,12 +1,11 @@
 <div class="container">
 	<div class="row">
-		<div class="col-md-4">
-			<div class="span3">
-				<div class="well">
-					<h4><%= @post.text%></h4>
-				</div>
-			</div>
-		</div>
+		<div class="card text-white bg-dark mb-4" style="max-width: 18rem;">
+  <div class="card-header">Post(<%=@post.words%>)</div>
+  <div class="card-body">
+    <p class="card-text"><%=@post.text%></p>
+  </div>
+</div>
 		<%if Payment.find_by(post_id: @post.id).present?%>
 		<%if @post.updated_text.present?%>
 		<div class="col-md-4">

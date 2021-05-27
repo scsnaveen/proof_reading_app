@@ -13,10 +13,12 @@ class PaymentsController < ApplicationController
 		@post = Post.find(params[:id])
 		@user_wallet = Wallet.find_by(user_id:@post.user_id)
 		@coupon = Coupon.find_by(code:params[:coupon_code]) 
-		coupon_redemption = CouponRedemption.find_by(coupon_id: @coupon.id) rescue nil
+		@coupon_redemption = CouponRedemption.where("coupon_id =? AND user_id=?", @coupon.id,current_user.id).first
+		puts @coupon_redemption.inspect
 		@admin_wallet =Wallet.find_by(:admin_id=>1)
+		@amount = @post.words.to_f * @post.per_word_amount.to_f
 
-		# if user amount is less it will show an error
+		# if user wallet balance is less it will show an error
 		if @user_wallet.balance < @post.words * PaymentCharge.first.per_word_amount
 			redirect_to payments_new_path(:id=> @post.id),alert: "There is no sufficient money"
 			return
@@ -28,39 +30,38 @@ class PaymentsController < ApplicationController
 				@payment                        = Payment.new
 				@payment.user_id                = @post.user_id
 				@payment.post_id                = @post.id
-				@payment.amount                 = @post.words * @post.per_word_amount
+				@payment.amount                 = @amount
 				@payment.status                 = "pending"
 				@payment.reference_id           = @payment_reference
 				# checking if coupon is present  
 				if @coupon.present?
-
-					# if user already use the coupon it will raise an error
-					if coupon_redemption.user_id.select{ |x| x == @post.user_id }.present? 
-						redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has been used"
-					return
-					# if coupon redemption count is  exceeded t will raise an error
-					elsif @coupon.redemption_limit == @coupon.coupon_redemptions_count
-					redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has been expired "
-					return
 					# if entered expired coupon it will raise an error
-					elsif  !DateTime.now.between?(@coupon.valid_from,@coupon.valid_until) 
+					if  !DateTime.now.between?(@coupon.valid_from,@coupon.valid_until) 
 						redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has been expired "
 						return
-					else
+				else
+					#checking if that user user redemption is present or else creating one 
+					if !@coupon_redemption.present?
+						@coupon_redemption = CouponRedemption.new
+						@coupon_redemption.coupon_id = @coupon.id
+						@coupon_redemption.user_id = current_user.id
+						@coupon_redemption.coupon_redemptions_count = 0
+						@coupon_redemption.save!
+					end
 						@payment.discount_id            = @coupon.id 
-						@payment.discount_amount        = @coupon.amount 
-						@payment.paid_amount            = @payment.amount - @payment.discount_amount + PaymentCharge.first.gst
+						# @payment.discount_amount        = (@amount.to_f/100.0 * @coupon.amount.to_f).ceil(0)
+						@payment.paid_amount            = @payment.amount
 					end
 				else
-					@payment.paid_amount = @payment.amount + PaymentCharge.first.gst
+					@payment.paid_amount = @payment.amount
 				end
 					@user_wallet.transaction do
 						@user_wallet.with_lock do 
-							@user_wallet.balance = @user_wallet.balance -  @payment.paid_amount 
+							@user_wallet.balance = @user_wallet.balance.to_f -  @payment.paid_amount.to_f 
 							@user_wallet.save
 
-							@admin_wallet.balance = @admin_wallet.balance + @payment.paid_amount 
-							@admin_wallet.save
+							@user_wallet.hold_amount = @user_wallet.hold_amount.to_f + @payment.paid_amount.to_f 
+							@user_wallet.save
 						end
 					end
 					@payment.status = "success"
@@ -69,6 +70,7 @@ class PaymentsController < ApplicationController
 					@transaction_reference = ( "transaction" + [*(0..9)].sample(10).join.to_s )
 					break @transaction_reference unless TransactionHistory.exists?(reference_id: @transaction_reference)
 				end
+				# creating transaction history
 				@transaction_history = TransactionHistory.new()
 				@transaction_history.user_id = current_user.id
 				@transaction_history.reference_id = @transaction_reference
@@ -76,11 +78,9 @@ class PaymentsController < ApplicationController
 				@transaction_history.payment_id = @payment.reference_id
 				@transaction_history.current_wallet_amount = @user_wallet.balance
 				@transaction_history.save
-				if @coupon.present?
-					coupon_redemption.user_id << @post.user_id
-					coupon_redemption.update(params.permit(:user_id))
-					@coupon.coupon_redemptions_count+=1
-					@coupon.update(params.permit(:coupon_redemptions_count))
+				if @coupon_redemption.present?
+					@coupon_redemption.coupon_redemptions_count+=1
+					@coupon_redemption.save
 				end
 				redirect_to post_show_path(:id=>@post.id),notice: "Payment successful"
 				# sending mail to admin after successful payment
@@ -91,10 +91,14 @@ class PaymentsController < ApplicationController
 	# coupon verification if coupon is present or not
 	def coupon_verification
 		@result = "not"
+		amount = params[:tot_amount]
 		if params[:code].present?
 			coupon =Coupon.find_by("code = ?",params[:code])
 			if coupon.present?
-				@result = coupon.amount
+				@result = {
+					:amount=>coupon.amount,
+					:total_amount=> amount.to_f/100 * coupon.amount.to_f.ceil(0)
+				}
 			else
 				@result = "Not a valid coupon"
 			end
@@ -104,18 +108,7 @@ class PaymentsController < ApplicationController
 			format.json {render :json=>@result}
 		end
 	end
-	def tot_amount
-		# @post = Post.find(params[:id])
-		# puts @post.inspect
-		coupon =Coupon.find_by("code = ?",params[:code])
-		# puts params[:post_id].inspect
-		# puts params[:amount].inspect
-		# puts params[:id].inspect
-		# respond_to do |format|
-		# 	format.html
-		# 	format.json {render :json=>value}
-		# end
-	end
+	
 	def extra_payment
 		@post = Post.find(params[:id])
 		payment = Payment.find_by("user_id = ? AND post_id = ?",@post.user_id,@post.id)

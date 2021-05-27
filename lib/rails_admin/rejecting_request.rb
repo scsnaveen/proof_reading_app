@@ -32,11 +32,11 @@ module RailsAdmin
 						end
 						@payment               = Payment.new()
 						@payment.admin_id      = current_admin.id
-						@payment.amount        = 25
+						@payment.amount        = Payment.find_by
 						@payment.reference_id  = @payment_reference
 						@payment.status        = "fined"
 						@payment.post_id       = @post.id
-						@payment.paid_amount   = 25
+						@payment.paid_amount   = PaymentCharge.first.fine_percentage / 100 * @payment.amount
 						@rejected_admin_wallet = Wallet.find_by(admin_id: current_admin.id)
 						@admin_wallet          = Wallet.find_by(:admin_id=>1)
 						if @rejected_admin_wallet.balance < @payment.amount

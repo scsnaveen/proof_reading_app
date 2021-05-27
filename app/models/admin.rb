@@ -8,7 +8,7 @@ class Admin < ApplicationRecord
     has_many :transaction_histories
   	serialize :roles, Array
     def roles_enum
-        [ 'Super Admin', 'Admin'  ]
+        [ 'Super Admin', 'ProofReader'  ]
     end
 
     rails_admin do 

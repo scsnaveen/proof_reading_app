@@ -5,7 +5,6 @@ class CouponsController < ApplicationController
 	before_action :authenticate_super_admin ,only: [:new, :create]
 	#coupons displaying for the user
 	def index
-
 		@coupons= Coupon.all
 	end
 	# adding a new coupon
@@ -16,9 +15,6 @@ class CouponsController < ApplicationController
 	def create
 		@coupon =Coupon.new(coupon_params)
 		@coupon.save
-		@coupon_redemption = CouponRedemption.new
-		@coupon_redemption.coupon_id = @coupon.id
-		@coupon_redemption.save
 		redirect_to new_coupon_path,notice: "Coupon has been created"
 	end
 	# checking if it is super admin or not

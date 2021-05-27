@@ -21,7 +21,7 @@ class Ability
       # admin ||= Admin.new # guest user (not logged in)
       if admin.role =="Super Admin"
         can :manage, :all
-      elsif admin.role == "Admin"
+      elsif admin.role == "ProofReader"
         can :access, :rails_admin
         can :dashboard ,:all
         can :read, :dashboard

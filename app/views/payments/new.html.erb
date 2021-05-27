@@ -32,25 +32,20 @@
 												<tr>
 														<td class="col-md-4"><em><%=@post.text%></em></h4></td>
 														<td class="col-md-1 text-center"><%=@post.words%></td>
-														<td class="col-md-1 text-center"><%=@post.per_word_amount.to_f%></td>
-														<td class="col-md-1 text-center"><span id ="amount"><%=@post.words * @post.per_word_amount.to_f %></span></td>
+														<td class="col ">
+                              <%= @post.per_word_amount%></td>
+														<td class="col-md-1 text-center" id= "tot_amount"><%=@post.words * @post.per_word_amount.to_f %></td>
 
 												</tr>
 												<tr>
-														<td>   </td>
-														<td>   </td>
-														<td class="text-right">Total: </td>
-														<td class="text-center text-danger"><h4><strong><%=@post.words * @post.per_word_amount.to_f%></strong></h4></td>
-												</tr>
-												<tr>
 													<td>
-														<%= form.hidden_field :post_id,:id => "amount"%>
 													<%=form.label :coupon_code%>
 													<%= form.text_field :coupon_code,:id => "code",:keyup=>"total_amount()" %></td>
 													<td>
-														discount:<p id= "result"></p><%= form.hidden_field :discount_amount, :id=>"result"%>
+														discount:<strong><p id= "result"></p></strong>
 													</td>
-													<td><h4><strong>Total amount:<p id ="value"></p></strong></h4>
+                          <td><strong><span id="value"></span></strong> </td>
+													<td><p><strong>Total amount:₹<%=@post.words * @post.per_word_amount.to_f%></strong></p>
 													</td>
 												</tr>
 										</tbody>
@@ -65,33 +60,20 @@
 	
  $(document).keyup(function() {
 							
-
 			$.ajax({    
 				type: "GET",
 				url: "coupon_verification",
 				dataType: "json",
-				data: { "code" : $("#code").val() },
+				data: { "code" : $("#code").val(),"tot_amount": $("#tot_amount").text() },
 				success: function(response){ 
-				 var obj = JSON.stringify(response);
-				 $("#result").html(obj)
+          console.log(response)
+				 // var obj = JSON.stringify(response);
+         // console.log(obj)
+         $("#result").html("upto"+response.amount+"%")
+				 $("#value").html("max discount :"+response.total_amount+"₹")
+         console.log(response.total_amount)
 				}
-
 		});
-			var id = "document.getElementById('<%=@post.id%>').innerHTML"
-			$.ajax({    
-				type: "GET",
-				url: "tot_amount",
-				dataType: "json",
-				data: { "code" : $("#code").val(),
-				"amount" : $("#amount").val()
-			},
-				success: function(response){ 
-				 var obj = JSON.stringify(response);
-				 $("#paid_amount").html(obj)
-				}
-
-		});
-
 });
 
 </script>
