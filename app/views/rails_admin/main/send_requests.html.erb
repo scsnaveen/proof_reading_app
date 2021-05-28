@@ -1,7 +1,6 @@
 <table class="table">
 	<thead class="thead-dark">
 		<tr>
-			<th scope="col">Id</th>
 			<th scope="col">Text</th>
 			<th scope="col">words</th>
 			<th scope="col">Status</th>
@@ -12,7 +11,7 @@
 		<%if @request = Request.find_by_post_id(post.id).present?%>
 		<%elsif Payment.find_by("post_id = ? AND user_id = ?",post.id,post.user_id)%>
 			<tr>
-				<td><%= @id = post.id%></td>
+				<% @id = post.id%>
 				<td><%=post.text%></td>
 				<td><%=post.words%></td>
 				<td><%=post.status%></td>

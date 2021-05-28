@@ -21,9 +21,10 @@
 								<table class="table table-hover">
 										<thead>
 												<tr>
-														<th class="text-center">text</th>
+														<th class="text-center">Text</th>
 														<th class="text-center">Amount</th>
 														<th class="text-center">Paid</th>
+														<th class="text-center">Discount code</th>
 														<th class="text-center">Discount</th>
 												</tr>
 										</thead>
@@ -32,6 +33,11 @@
 														<td class="col-md-4 text-center"><%=Post.find(@payment.post_id).text%></td>
 														<td class="col-md-1 text-center"><%=@payment.amount%></td>
 														<td class="col-md-1 text-center"><%=@payment.paid_amount%></td>
+														<%if @payment.discount_id.present?%>
+														<td class="col-md-2 text-center"><%=Coupon.find(@payment.discount_id).code%></td>
+														<%else%>
+														<td class="col-md-4 text-center"><%=link_to "Add Coupon",payments_new_path(id:@payment.post_id),class:"btn btn-primary btn-sm"%></td>
+														<%end%>
 														<td class="col-md-1 text-center">
 															<%=@payment.amount - @payment.paid_amount%></td>
 												</tr>	

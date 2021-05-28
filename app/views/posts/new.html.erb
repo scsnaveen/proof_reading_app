@@ -3,7 +3,7 @@
 	<div class="row-auto">
 		<div class="col-md-6 mx-auto mb-5">
 
-		<%= form_with(model: @post, url: post_create_path(@post), method: "post", remote: true) do |f| %>
+		<%= form_with(model: @post, url: posts_create_path(@post), method: "post", remote: true) do |f| %>
 			<h3>Enter a text </h3>
 			<div id="word-count-container">
 			<%= f.text_area :text ,class: "form-control", :id => "no-of-words", :keyup=>"updatecount()"%>

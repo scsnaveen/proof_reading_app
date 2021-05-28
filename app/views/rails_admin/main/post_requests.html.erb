@@ -10,14 +10,12 @@
   <tbody>
     <% @requests.all.each do |f|%> 
     <tr>
-      <% if !current_admin.id.in? f.rejected_admin%>
        <td><%=  f.id%></td><%@id =f.post_id%>
         <% user_text = Post.find_by(:id=>f.post_id)%>
         <td><%= user_text.text%></td>
       <td><%=user_text.words%></td>
       <%=form_for request, url: post_requests_path(request,:id=> @id,model_name: Post), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
         <td><%=form.submit 'accept'%>
-        <%end%>
         <%end%>
       </td>
     </tr>

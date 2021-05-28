@@ -23,7 +23,7 @@ module RailsAdmin
 				end
 				register_instance_option :controller do
 					Proc.new do
-						@requests = Request.where(:accepted_admin=> nil) 
+						@requests = Request.where(admin_id:current_admin.id) 
 						# @posts = Post.where(status: "pending") 
 						if request.post?|| request.put?
 							arr =[]

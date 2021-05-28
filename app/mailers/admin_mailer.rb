@@ -16,10 +16,10 @@ class AdminMailer < ApplicationMailer
 		@admin = Admin.find_by(:role =>"Super Admin")
 		mail(:from =>"railschecking@gmail.com",:to=>@admin.email,subject: "Paid for proof reading")
 	end
-	# sending all admins that new post request is delivered
+	# sending all ProofReaders that new post request is delivered
 	def new_post_admin_notify_email(admin,request)
 		@request = Request.find(request.id)
-		@admin =Admin.find(admin.id)
+		@admin =Admin.find(admin)
 		mail(:from =>"railschecking@gmail.com",:to=> @admin.email, subject: "New Post request")
 	end
 end

@@ -17,7 +17,7 @@
 		</div>
 		</div>
 		<h3>Please provide the reason</h3>
-		<%= form_with url:post_rejected_request_path(:id=>@post.id)  do |f|%>
+		<%= form_with url:posts_rejected_request_path(:id=>@post.id)  do |f|%>
 		<div class="row">
 			<div class="col-md-4 mx-auto mb-5">
 				<%= f.text_area :reason,class: "form-control"%>

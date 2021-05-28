@@ -27,14 +27,17 @@ module RailsAdmin
 				register_instance_option :controller do
 					Proc.new do
 						@posts = Post.where(status: "pending")
+						# @requests = Request.find_by()
 						if request.post?
 							@post = Post.find(params[:id])
-							@request = Request.new(params.permit(:post_id,:accepted_admin,:rejected_admin,:time_taken))
+							@admins = Admin.where(role:"ProofReader")
+							@admins.all.each do |admin|
+							@request = Request.new
 							@request.post_id = @post.id
+							@request.admin_id = admin.id
+							@request.status = "pending"
 							@request.save
-							Admin.all.each do |admin|
-								@admin =Admin.find(admin.id)
-								AdminMailer.new_post_admin_notify_email(@admin,@request).deliver
+							AdminMailer.new_post_admin_notify_email(admin.id,@request).deliver_now
 							end
 						end
 					end#Proc.new do

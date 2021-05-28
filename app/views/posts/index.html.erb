@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="col-xs-12 text-right">   
 				<div class="next">
-					<%= link_to "New Post",post_new_path,class: "btn btn-sm btn-success"%>
+					<%= link_to "New Post",posts_new_path,class: "btn btn-sm btn-success"%>
 					</button>
 				</div>
 		</div>
@@ -28,7 +28,7 @@
 			<%else%>
 				<td>pending</td>
 			<%end%>
-			<td><%=link_to "view",post_show_path(:id=>post.id)%></td>
+			<td><%=link_to "view",posts_show_path(:id=>post.id)%></td>
 			<td>
 			<%if payment.present?%>
 			 <%=link_to "payment",payments_show_path(:post_id=>post.id)%>
@@ -36,7 +36,7 @@
 			</td>
 			<td>
 			<%if post.status=="completed"%>
-			<%=link_to "invoice",post_invoice_path(:id=>post.id)%>
+			<%=link_to "invoice",posts_invoice_path(:id=>post.id)%>
 			<%end%>
 			</td>
 		</tr>
