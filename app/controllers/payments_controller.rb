@@ -97,7 +97,7 @@ class PaymentsController < ApplicationController
 			if coupon.present?
 				@result = {
 					:amount=>coupon.amount,
-					:total_amount=> amount.to_f/100 * coupon.amount.to_f.ceil(0)
+					:total_amount=> (amount.to_f/100 * coupon.amount.to_f).ceil(0)
 				}
 			else
 				@result = "Not a valid coupon"
@@ -108,7 +108,7 @@ class PaymentsController < ApplicationController
 			format.json {render :json=>@result}
 		end
 	end
-	
+
 	def extra_payment
 		@post = Post.find(params[:id])
 		payment = Payment.find_by("user_id = ? AND post_id = ?",@post.user_id,@post.id)
