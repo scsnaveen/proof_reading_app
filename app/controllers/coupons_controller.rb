@@ -14,7 +14,7 @@ class CouponsController < ApplicationController
 	# creating a new coupon and coupon redemption
 	def create
 		@coupon =Coupon.new(coupon_params)
-		@coupon.save
+		@coupon.save!
 		redirect_to new_coupon_path,notice: "Coupon has been created"
 	end
 	# checking if it is super admin or not
@@ -27,6 +27,6 @@ class CouponsController < ApplicationController
 
 	private
 	def coupon_params
-		params.require(:coupon).permit(:code,:description,:valid_from,:valid_until,:redemption_limit,:coupon_redemptions_count,:amount)
+		params.require(:coupon).permit(:code,:description,:coupon_type,:valid_from,:valid_until,:redemption_limit,:amount,:percentage)
 	end
 end

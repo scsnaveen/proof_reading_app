@@ -25,17 +25,17 @@
     </div>
 
     <div class="form-label">
-      <%= form.label :type %>
-    </div>
-
-    
-
-    <div >
-      <p>Amount(in percentage)</p>
+      <%= form.label :coupon_type %>
+      <%= form.select :coupon_type, [:amount,:percentage]%>
     </div>
 
     <div >
-      <%= form.text_field :amount,class: "form-control" %>
+      <%= form.label :amount%>
+      <%= form.number_field :amount,class: "form-control" %>
+    </div>
+    <div >
+      <%= form.label :percentage%>
+      <%= form.number_field :percentage,class: "form-control" %>
     </div>
 
     <div class="form-label">

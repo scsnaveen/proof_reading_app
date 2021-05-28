@@ -8,8 +8,7 @@
 	</thead>
 	<tbody>
 		<% @posts.all.each do |post|%>
-		<%if @request = Request.find_by_post_id(post.id).present?%>
-		<%elsif Payment.find_by("post_id = ? AND user_id = ?",post.id,post.user_id)%>
+		<%if !Request.find_by_post_id(post.id).present?%>
 			<tr>
 				<% @id = post.id%>
 				<td><%=post.text%></td>

@@ -27,10 +27,10 @@ module RailsAdmin
 				register_instance_option :controller do
 					Proc.new do
 						@posts = Post.where(status: "pending")
-						# @requests = Request.find_by()
 						if request.post?
 							@post = Post.find(params[:id])
-							@admins = Admin.where(role:"ProofReader")
+							# sending requests to proof reader who are not busy
+							@admins = Admin.where("role=? AND admin_status=?","ProofReader","not busy")
 							@admins.all.each do |admin|
 							@request = Request.new
 							@request.post_id = @post.id

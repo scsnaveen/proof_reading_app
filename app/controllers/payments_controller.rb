@@ -45,14 +45,22 @@ class PaymentsController < ApplicationController
 		amount = params[:tot_amount]
 		if params[:code].present?
 			coupon =Coupon.find_by("code = ?",params[:code])
-			if coupon.present?
-				@result = {
-					:amount=>coupon.amount,
-					:total_amount=> (amount.to_f/100 * coupon.amount.to_f).ceil(0)
-				}
-			else
-				@result = "Not a valid coupon"
-			end
+				if coupon.present?
+					if coupon.coupon_type =="percentage"
+						@result = {
+							:percentage=>coupon.percentage,
+							:total_amount=> (amount.to_f/100 * coupon.percentage.to_f).ceil(0)
+						}
+					else
+						@result = {
+						:percentage=>coupon.amount,
+						:total_amount=> coupon.amount
+					}
+
+					end
+				else
+					@result = "Not a valid coupon"
+				end
 		end
 		respond_to do |format|
 			format.html

@@ -23,9 +23,7 @@ module RailsAdmin
 				end
 				register_instance_option :controller do
 					Proc.new do
-						@accepted_requests = Request.where(accepted_admin: current_admin.id) 
-						@rejected_requests = Request.where(status: "not satisified") if @accepted_requests
-						@satisifed_requests = Request.where(status: "satisifed")
+						@accepted_requests = Request.where("admin_id=? AND status=?", current_admin.id,"reserved") 
 					end#Proc.new do
 				end
 			end#AcceptedRequests

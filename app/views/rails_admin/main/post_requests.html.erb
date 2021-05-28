@@ -8,7 +8,9 @@
     </tr>
   </thead>
   <tbody>
-    <% @requests.all.each do |f|%> 
+    <% @requests.all.each do |f|%>
+
+    <%if !Request.where("post_id=? AND status=?",f.post_id,"reserved").first.present?%>
     <tr>
        <td><%=  f.id%></td><%@id =f.post_id%>
         <% user_text = Post.find_by(:id=>f.post_id)%>
@@ -19,6 +21,7 @@
         <%end%>
       </td>
     </tr>
+    <%end%>
     <%end%>
   </tbody>
 </table>

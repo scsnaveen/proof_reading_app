@@ -27,11 +27,10 @@ module RailsAdmin
 				end
 				register_instance_option :controller do
 					Proc.new do
-						if @request =Request.find_by(:accepted_admin=>current_admin)
+						if @request =Request.where("admin_id=? AND status=?",current_admin,"reserved")
 							if request.get?
 							@post = Post.find(params[:id])
 							@request = Request.find_by(post_id: @post.id)
-							@request.start_time =Time.now
 							@request.save
 						end
 							if request.post? || request.put?

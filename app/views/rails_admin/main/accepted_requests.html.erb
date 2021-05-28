@@ -3,17 +3,17 @@
 	<h1>Accepted requests</h1>
 	<thead class="thead-dark">
 	<tr>
-		<th scope="col">Id</th>
 		<th scope="col">Text</th>
+		<th scope="col">Words</th>
 		<th scope="col">Status</th>
 	</tr>
 	</thead>
 	<tbody>
 	<% @accepted_requests.all.each do |f|%>
 	<tr>
-		<td><%= f.post_id%></td>
 		<% t = Post.find_by(:id=>f.post_id)%>
 		<td><%=t.text%></td>
+		<td><%=t.words%></td>
 		<td><%=f.status%></td>
 		<td>
 			<%if f.status != "completed"%>
@@ -28,32 +28,3 @@
 <%else%>
 <h3>Didn't have any accepted requests</h3>
 <%end%>
-<% if @rejected_requests.present?%>
-<% @rejected_requests.all.each do |f|%>
-<%if f.accepted_admin==current_admin.id%>
-<table class="table">
-	<h1>User unsatisified requests</h1>
-	<thead class="thead-dark">
-	<tr>
-		<th scope="col">Id</th>
-		<th scope="col">Text</th>
-		<th scope="col">Status</th>
-	</tr>
-	</thead>
-	<tbody>
-	<tr>
-		<td><%= f.post_id%></td>
-		<% t = Post.find_by(:id=>f.post_id)%>
-		<td><%=t.text%></td>
-		<td><%=f.status%></td>
-		<%if t.status !="completed"%>
-		<td><%=link_to 'change',proof_reading_path(:id=>f.post_id),class: "btn btn-primary btn-sm"%>	
-			<%= link_to "Reject" ,rejecting_request_path(:id=>f.post_id) ,class: "btn btn-primary btn-sm"%>
-		</td>
-		<%end%>
-	</tr>
-	</tbody>
-</table>
-<%end%>
-<%end%>
-	<%end%>

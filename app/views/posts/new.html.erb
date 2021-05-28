@@ -36,7 +36,7 @@
 		url: "total_amount",
 		dataType: "json",
 		data: { 
-		"words": $("#no-of-words").val().split(' ').length
+		"words": wordCount
 		 },
 		success: function(response){ 
 			var obj = JSON.stringify(response);

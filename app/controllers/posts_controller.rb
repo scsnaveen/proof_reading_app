@@ -50,7 +50,7 @@ class PostsController < ApplicationController
 				@payment.status = "success"
 				@payment.paid_amount = @payment.amount
 				@payment.save
-				AdminMailer.admin_notify_email(@post).deliver
+				AdminMailer.admin_notify_email(@post).deliver rescue nil
 				redirect_to payments_new_path(:id=>@post.id),notice: "Your post has been successfully saved"
 			end
 		else

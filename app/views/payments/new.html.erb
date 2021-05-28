@@ -16,7 +16,7 @@
 						</div>
 						<div class="row">
 								<div class="text-center">
-										<h1>Payment</h1>
+										<h1>Apply Coupon</h1>
 								</div>
 								</span>
 								<table class="table table-hover">
@@ -69,8 +69,8 @@
           console.log(response)
 				 // var obj = JSON.stringify(response);
          // console.log(obj)
-         $("#result").html("upto"+response.amount+"%")
-				 $("#value").html("max discount :"+response.total_amount+"₹")
+         $("#result").html("upto"+response.percentage)
+				 $("#value").html("cashback amount :"+response.total_amount+"₹")
          console.log(response.total_amount)
 				}
 		});
