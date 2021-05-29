@@ -44,7 +44,7 @@ module RailsAdmin
 								@request.update_attributes(params.permit(:time_taken))
 								@post.update_attributes(params.require(:post).permit(:updated_text,:status))
 								redirect_to dashboard_path
-								# UserMailer.user_notify_email(@post.user_id).deliver
+								UserMailer.user_notify_email(@post.user_id).deliver_now rescue nil
 							end
 						end
 						

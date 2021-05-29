@@ -1,27 +1,27 @@
 <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Text</th>
-      <th scope="col">words</th>
-      <th scope="col">Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @requests.all.each do |f|%>
+	<thead class="thead-dark">
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Text</th>
+			<th scope="col">words</th>
+			<th scope="col">Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @requests.all.each do |f|%>
 
-    <%if !Request.where("post_id=? AND status=?",f.post_id,"reserved").first.present?%>
-    <tr>
-       <td><%=  f.id%></td><%@id =f.post_id%>
-        <% user_text = Post.find_by(:id=>f.post_id)%>
-        <td><%= user_text.text%></td>
-      <td><%=user_text.words%></td>
-      <%=form_for request, url: post_requests_path(request,:id=> @id,model_name: Post), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
-        <td><%=form.submit 'accept'%>
-        <%end%>
-      </td>
-    </tr>
-    <%end%>
-    <%end%>
-  </tbody>
+			<%if !Request.where("post_id=? AND status=?",f.post_id,"reserved").first.present?%>
+				<tr>
+					<td><%=  f.id%></td><%@id =f.post_id%>
+					<% user_text = Post.find_by(:id=>f.post_id)%>
+					<td><%= user_text.text%></td>
+					<td><%=user_text.words%></td>
+					<%=form_for request, url: post_requests_path(request,:id=> @id,model_name: Post), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
+						<td><%=form.submit 'accept'%>
+						<%end%>
+					</td>
+				</tr>
+			<%end%>
+		<%end%>
+	</tbody>
 </table>

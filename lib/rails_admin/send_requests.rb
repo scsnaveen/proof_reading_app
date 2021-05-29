@@ -32,13 +32,17 @@ module RailsAdmin
 							# sending requests to proof reader who are not busy
 							@admins = Admin.where("role=? AND admin_status=?","ProofReader","not busy")
 							@admins.all.each do |admin|
-							@request = Request.new
-							@request.post_id = @post.id
-							@request.admin_id = admin.id
-							@request.status = "pending"
-							@request.save
-							AdminMailer.new_post_admin_notify_email(admin.id,@request).deliver_now
+								# if request not present
+								if !(Request.where("admin_id=? AND post_id=?",admin.id,@post.id).first.present?)
+									@request = Request.new
+									@request.post_id = @post.id
+									@request.admin_id = admin.id
+									@request.status = "pending"
+									@request.save
+									AdminMailer.new_post_admin_notify_email(admin.id,@request).deliver_now rescue nil
+								end
 							end
+								redirect_to dashboard_path,notice:"Sent requests"
 						end
 					end#Proc.new do
 				end

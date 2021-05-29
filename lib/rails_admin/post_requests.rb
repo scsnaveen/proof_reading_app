@@ -28,23 +28,28 @@ module RailsAdmin
 						if request.post?|| request.put?
 							@post = Post.find(params[:id])
 							if !Request.where("post_id=? AND status=?",@post.id,"reserved").first.present?
-							arr =[]
-							# verifying if any pending requests are present
-							@requests = Request.where("admin_id = ? AND status=?",current_admin.id,"reserved")
-							@requests.all.each do |request|
-								arr <<request.status.present?
-							end
-							if arr.include?(true)
-								flash[:alert]= "You already have pending tasks"
-								redirect_to dashboard_path
+								arr =[]
+								# verifying if any pending requests are present
+								@requests = Request.where("admin_id = ? AND status=?",current_admin.id,"reserved")
+								@requests.all.each do |request|
+									arr <<request.status.present?
+								end
+								# if pending request present
+								if arr.include?(true)
+									flash[:alert]= "You already have pending tasks"
+									redirect_to dashboard_path
+									# if pending requests not present
+								else
+									@post = Post.find(params[:id])
+									@request = Request.where("post_id=? AND admin_id=?",@post.id,current_admin.id).first
+									@request.status = "reserved"
+									current_admin.admin_status ="Busy"
+									current_admin.save
+									@request.save
+									flash[:notice]= "You accepted the request"
+									redirect_to dashboard_path
+								end
 							else
-								@post = Post.find(params[:id])
-								@request = Request.where("post_id=? AND admin_id=?",@post.id,current_admin.id).first
-								@request.status = "reserved"
-								current_admin.admin_status ="Busy"
-								current_admin.save
-								@request.save
-							end
 								flash[:alert]= "This post is already reserved"
 								redirect_to dashboard_path
 							end

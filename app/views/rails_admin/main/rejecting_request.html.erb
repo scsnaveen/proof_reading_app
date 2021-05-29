@@ -8,25 +8,24 @@
 			</div>
 		</div>
 		<%if @post.updated_text.present?%>
-		<div class="col-md-4">
-			<div class="span3">
-				<div class="well">
-					<h4><%= @post.updated_text%></h4>
+			<div class="col-md-4">
+				<div class="span3">
+					<div class="well">
+						<h4><%= @post.updated_text%></h4>
+					</div>
 				</div>
 			</div>
-		</div>
-		</div>
 		<%end%>
-		<h3>Are you sure</h3>
-		<%= form_with url:rejecting_request_path(:id=>@post.id)  do |f|%>
-		<div class="row">
-			<div class="col-md-4 mx-auto mb-5">
-		
-			<%= f.submit "Reject",class: "btn btn-lg"%>
-
-		</div>
 	</div>
-		<%end%>
+		
+	<%=form_for @post, url: rejecting_request_path(@post,:id=> @post.id,model_name: Post), as: @abstract_model.param_key, html: { method: "post", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |f|%>
+		<div class="row">
+			<h3>Are you sure you will be fined <%=PaymentCharge.first.fine_percentage / 100 * Payment.find_by(post_id:@post.id).paid_amount%>Rs</h3>
+			<div class="col-md-4 mx-auto mb-5">
+				<%= f.submit "Reject",class: "btn btn-lg"%>
+			</div>
+		</div>
+	<%end%>
 	
 </div>
 

@@ -66,7 +66,7 @@ class PostsController < ApplicationController
 		@request = Request.find_by(post_id: @post.id)
 		@request.status="completed"
 		@request.reason = params[:reason]
-		@request.update(params.permit(:reason,:status))
+		@request.save
 		redirect_to posts_index_path,notice: "Thank you ,Please visit again"
 	end
 

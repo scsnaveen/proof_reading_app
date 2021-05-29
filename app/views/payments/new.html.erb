@@ -66,12 +66,8 @@
 				dataType: "json",
 				data: { "code" : $("#code").val(),"tot_amount": $("#tot_amount").text() },
 				success: function(response){ 
-          console.log(response)
-				 // var obj = JSON.stringify(response);
-         // console.log(obj)
-         $("#result").html("upto"+response.percentage)
+         $("#result").html("upto"+response.percentage+response.symbol)
 				 $("#value").html("cashback amount :"+response.total_amount+"₹")
-         console.log(response.total_amount)
 				}
 		});
 });

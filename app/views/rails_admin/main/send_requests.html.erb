@@ -8,7 +8,7 @@
 	</thead>
 	<tbody>
 		<% @posts.all.each do |post|%>
-		<%if !Request.find_by_post_id(post.id).present?%>
+		<%if !Request.where("status=? AND post_id=?","reserved",post.id).present?%>
 			<tr>
 				<% @id = post.id%>
 				<td><%=post.text%></td>
