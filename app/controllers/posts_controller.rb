@@ -62,7 +62,7 @@ class PostsController < ApplicationController
 	def accept
 		@post = Post.find(params[:id])
 		@user_wallet = current_user.wallet
-		@request = Request.where("post_id=? AND status=?",@post.id,"reserved").first
+		@request = Request.where("post_id=? AND status=?",@post.id,"completed").first
 		loop do 
 			@payment_reference = ( "complete" + [*(0..9)].sample(10).join.to_s )
 			break @payment_reference unless Payment.exists?(reference_id: @payment_reference)
@@ -105,7 +105,6 @@ class PostsController < ApplicationController
 					@admin_wallet.save
 				end
 			end
-			@request.status = "rejected"
 			@request.save
 			@payment.save
 			@payment1.save
@@ -143,7 +142,7 @@ class PostsController < ApplicationController
 	#  reason for the rejection of updated text
 	def rejected_request
 		@post =Post.find(params[:id])
-		@request = Request.find_by(post_id: @post.id)
+		@request = Request.where("post_id=? AND status=?", @post.id,"completed").first
 		if params[:reason].blank?
 			flash[:alert]="Please provide the reason"
 			redirect_to posts_reject_path(id:@post.id) 
@@ -159,6 +158,7 @@ class PostsController < ApplicationController
 	# displaying the post
 	def show
 		@post =Post.find(params[:id])
+		@request = Request.where("post_id=? AND status=?",@post.id,"completed").first
 	end
 	# using to calculate the total amount
 	def total_amount

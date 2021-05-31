@@ -18,12 +18,22 @@ module RailsAdmin
 					false
 				end
 				register_instance_option :http_methods do
-					[:get,:post]
+					[:get,:put,:post]
 				end
 				register_instance_option :controller do
 					Proc.new do
 						@post = Post.find(params[:id])
 						@request = Request.where("post_id=? AND admin_id=?", @post.id,current_admin.id)
+						# rejecting before accepting
+						if request.put?
+							@post = Post.find(params[:id])
+							@request = Request.where("post_id=? AND admin_id=?", @post.id,current_admin.id).first
+							@request.status = "rejected"
+							@request.save
+							flash[:alert]="The request is rejected"
+							redirect_to dashboard_path
+						end
+						# rejecting after accepting
 						if request.post?
 							@post = Post.find(params[:id])
 							@request = Request.where("post_id=? AND admin_id=?", @post.id,current_admin.id).first

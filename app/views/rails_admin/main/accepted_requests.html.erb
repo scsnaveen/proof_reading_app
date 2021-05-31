@@ -17,8 +17,9 @@
 		<td><%=f.status%></td>
 		<td>
 			<%if f.status != "completed"%>
-			<%=link_to 'change',proof_reading_path(:id=>f.post_id),class: "btn btn-primary btn-sm"%>	
+			<%=link_to 'read',proof_reading_path(:id=>f.post_id),class: "btn btn-primary btn-sm"%>	
 			<%= link_to "Reject" ,rejecting_request_path(:id=>f.post_id) ,class: "btn btn-primary btn-sm"%>
+			<%= link_to "Submit" ,proof_reading_path(:id=>f.post_id) ,class: "btn btn-primary btn-sm",method:"post"%>
 			<%end%>
 		</td>
 	</tr>

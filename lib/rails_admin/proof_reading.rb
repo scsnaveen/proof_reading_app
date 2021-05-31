@@ -49,23 +49,27 @@ module RailsAdmin
 						end
 						if request.post? 
 							@post = Post.find(params[:id])
-							@request = Request.where("admin_id=? AND post_id=? AND status=?",current_admin.id, @post.id,"reserved").first
-							@post.status = "edited"
-							# getting time and splitting
-							time_split = params[:time1].split(":") rescue nil
-							#converting the time taken to integer
-							time_taken = time_split[0].to_i*3600 + time_split[1].to_i * 60 + time_split[2].to_i rescue 0
-							if @request.time_taken.present?
-								@request.time_taken += time_taken
-							else
-								@request.time_taken = time_taken
+							@request = Request.where("admin_id=? AND post_id=?",current_admin.id, @post.id).first
+							if params[:time1].present?
+								# getting time and splitting
+								time_split = params[:time1].split(":") rescue nil
+								#converting the time taken to integer
+								time_taken = time_split[0].to_i*3600 + time_split[1].to_i * 60 + time_split[2].to_i rescue 0
+								if @request.time_taken.present?
+									@request.time_taken += time_taken
+								else
+									@request.time_taken = time_taken
+								end
 							end
 							@request.status ="completed"
-							@post.update_attributes(params.permit(:updated_text,:status))
 							@request.save
+							@post.status = "edited"
+							@post.update_attributes(params.permit(:updated_text,:status))
+							current_admin.admin_status ="not busy"
+							current_admin.save 
 							flash[:notice]="Proof reading post is saved and completed"
 							redirect_to dashboard_path
-							UserMailer.user_notify_email(@post.user_id).deliver_now rescue nil
+							# UserMailer.user_notify_email(@post.user_id).deliver_now rescue nil
 						end
 						
 					end#Proc.new do

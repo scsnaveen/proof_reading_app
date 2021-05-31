@@ -9,6 +9,8 @@
 		</div>
 		</div>
 		<div class="col-sm-6">
+
+		<%if  @request.present? && @request.status=="completed"%>
 		<%if @post.updated_text.present?%>
 		<div class="card text-white bg-dark mb-4" style="max-width: 18rem;">
 			<div class="card-header">Post(<%=@post.words%>)</div>
@@ -17,12 +19,14 @@
 			</div>
 		</div>
 		</div>
-		<%if @post.status!="completed"%>
+		<%end%>
+		<%if !Payment.find_by(post_id:@post.id).discount_id.present?%>
+		<h4>Before submitting apply coupon <%=link_to "add coupon",payments_show_path(:post_id=>@post.id)%></h4>
+		<%end%>
 		<div class="col-md-8">
 			<%= link_to "Accept",posts_accept_path(:id=>@post.id),class: "btn btn-success",method: :post %>
 			<%= link_to "Reject", posts_reject_path(:id=>@post.id),class: "btn btn-danger "%>
 			</div>
-			<%end%>
 		<%end%>
 	</div>
 </div>
