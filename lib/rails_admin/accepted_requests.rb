@@ -24,6 +24,7 @@ module RailsAdmin
 				register_instance_option :controller do
 					Proc.new do
 						@accepted_requests = Request.where("admin_id=? AND status=?", current_admin.id,"reserved") 
+						@completed_requests = Request.where("admin_id=? AND status=?", current_admin.id,"completed") 
 					end#Proc.new do
 				end
 			end#AcceptedRequests

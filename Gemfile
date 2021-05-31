@@ -58,3 +58,5 @@ gem 'sidekiq'
 gem "twitter-bootstrap-rails"
 gem "rails_admin", '~> 2.0'
 gem 'cancancan'
+gem 'easy_timer'
+

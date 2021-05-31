@@ -1,4 +1,3 @@
-
 module RailsAdmin
 	module Config
 		module Actions
@@ -7,7 +6,7 @@ module RailsAdmin
 				register_instance_option :visible? do
 					authorized? 
 				end
-					register_instance_option :show_in_menu do
+				register_instance_option :show_in_menu do
 					false
 				end
 				# specific for post/Record
@@ -27,25 +26,46 @@ module RailsAdmin
 				end
 				register_instance_option :controller do
 					Proc.new do
-						if @request =Request.where("admin_id=? AND status=?",current_admin,"reserved")
-							if request.get?
+						if request.get?
 							@post = Post.find(params[:id])
-							@request = Request.find_by(post_id: @post.id)
-							@request.save
+							@request = Request.where("admin_id=? AND post_id=? AND status=?",current_admin.id, @post.id,"reserved").first
 						end
-							if request.post? || request.put?
-								@post = Post.find(params[:id])
-								@request = Request.find_by(post_id: @post.id)
-								end_time =Time.now.to_formatted_s(:number)
-								start_time = @request.start_time.to_formatted_s(:number)
-								time = end_time.to_i - start_time.to_i
-								@post.status = "edited"
-								@request.time_taken += time
-								@request.update_attributes(params.permit(:time_taken))
-								@post.update_attributes(params.require(:post).permit(:updated_text,:status))
-								redirect_to dashboard_path
-								UserMailer.user_notify_email(@post.user_id).deliver_now rescue nil
+						if request.put?
+							@post = Post.find(params[:id])
+							@request = Request.where("post_id=? AND status=?", @post.id,"reserved").first
+							# getting time and splitting
+							time_split = params[:time1].split(":") rescue nil
+							#converting the time taken to integer
+							time_taken = time_split[0].to_i*3600 + time_split[1].to_i * 60 + time_split[2].to_i rescue 0
+							if @request.time_taken.present?
+								@request.time_taken += time_taken
+							else
+								@request.time_taken = time_taken rescue nil
 							end
+							@request.save
+							@post.update_attributes(params.permit(:updated_text))
+							flash[:notice]="Proof reading post is saved"
+							redirect_to dashboard_path
+						end
+						if request.post? 
+							@post = Post.find(params[:id])
+							@request = Request.where("admin_id=? AND post_id=? AND status=?",current_admin.id, @post.id,"reserved").first
+							@post.status = "edited"
+							# getting time and splitting
+							time_split = params[:time1].split(":") rescue nil
+							#converting the time taken to integer
+							time_taken = time_split[0].to_i*3600 + time_split[1].to_i * 60 + time_split[2].to_i rescue 0
+							if @request.time_taken.present?
+								@request.time_taken += time_taken
+							else
+								@request.time_taken = time_taken
+							end
+							@request.status ="completed"
+							@post.update_attributes(params.permit(:updated_text,:status))
+							@request.save
+							flash[:notice]="Proof reading post is saved and completed"
+							redirect_to dashboard_path
+							UserMailer.user_notify_email(@post.user_id).deliver_now rescue nil
 						end
 						
 					end#Proc.new do

@@ -1,32 +1,30 @@
 <div class="container">
 	<div class="row">
-		<div class="col-md-4">
-			<div class="span3">
-				<div class="well">
-					<h4><%= @post.text%></h4>
-				</div>
-			</div>
-		</div>
-		<%if @post.updated_text.present?%>
-		<div class="col-md-4">
-			<div class="span3">
-				<div class="well">
-					<h4><%= @post.updated_text%></h4>
-				</div>
+		<div class="col-sm-6">
+		<div class="card text-white bg-dark mb-4" style="max-width: 18rem;">
+			<div class="card-header">Post(<%=@post.words%>)</div>
+			<div class="card-body">
+				<p class="card-text"><%=@post.text%></p>
 			</div>
 		</div>
 		</div>
+		<div class="col-sm-6">
+		<div class="card text-white bg-dark mb-4" style="max-width: 18rem;">
+			<div class="card-header">Post(<%=@post.words%>)</div>
+			<div class="card-body">
+				<p class="card-text"><%=@post.updated_text%></p>
+			</div>
+		</div>
+		</div>
+	</div>
 		<h3>Please provide the reason</h3>
 		<%= form_with url:posts_rejected_request_path(:id=>@post.id)  do |f|%>
 		<div class="row">
 			<div class="col-md-4 mx-auto mb-5">
 				<%= f.text_area :reason,class: "form-control"%>
-		
-			<%= f.submit "Reject",class: "btn btn-lg"%>
-
+				<%= f.submit "Reject",class: "btn btn-lg"%>
+			</div>
 		</div>
-	</div>
-		<%end%>
 		<%end%>
 	
 </div>

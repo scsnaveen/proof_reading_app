@@ -48,15 +48,17 @@ class PaymentsController < ApplicationController
 				if coupon.present?
 					if coupon.coupon_type =="percentage"
 						@result = {
-							:percentage=>coupon.percentage,
+							:percentage=>coupon.percentage.to_i,
 							:total_amount=> (amount.to_f/100 * coupon.percentage.to_f).ceil(0),
-							:symbol=>"%"
+							:symbol=>"%",
+							:word_symbol=>" "
 						}
 					else
 						@result = {
-						:percentage=>coupon.amount,
-						:total_amount=> coupon.amount,
-						:symbol=>"Rs"
+						:percentage=>coupon.amount.to_i,
+						:total_amount=> coupon.amount.to_i,
+						:symbol=>"",
+						:word_symbol=>"Rs."
 					}
 
 					end

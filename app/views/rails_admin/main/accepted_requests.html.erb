@@ -26,5 +26,28 @@
 	</tbody>
 </table>
 <%else%>
-<h3>Didn't have any accepted requests</h3>
+<h3>Didn't accepted any new proof reading requests</h3>
 <%end%>
+<% if @completed_requests.present?%>
+<table class="table">
+	<h1>Completed requests</h1>
+	<thead class="thead-dark">
+	<tr>
+		<th scope="col">Text</th>
+		<th scope="col">Words</th>
+		<th scope="col">Status</th>
+	</tr>
+	</thead>
+	<tbody>
+	<% @completed_requests.all.each do |f|%>
+	<tr>
+		<% t = Post.find_by(:id=>f.post_id)%>
+		<td><%=t.text%></td>
+		<td><%=t.words%></td>
+		<td><%=f.status%></td>
+	</tr>
+	<%end%>
+	</tbody>
+</table>
+<%end%>
+

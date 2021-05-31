@@ -1,19 +1,21 @@
 <div class="container">
 	<div class="row">
+		<div class="col-sm-6">
 		<div class="card text-white bg-dark mb-4" style="max-width: 18rem;">
-  <div class="card-header">Post(<%=@post.words%>)</div>
-  <div class="card-body">
-    <p class="card-text"><%=@post.text%></p>
-  </div>
-</div>
-		<%if Payment.find_by(post_id: @post.id).present?%>
-		<%if @post.updated_text.present?%>
-		<div class="col-md-4">
-			<div class="span3">
-				<div class="well">
-					<h4><%= @post.updated_text%></h4>
-				</div>
+			<div class="card-header">Post(<%=@post.words%>)</div>
+			<div class="card-body">
+				<p class="card-text"><%=@post.text%></p>
 			</div>
+		</div>
+		</div>
+		<div class="col-sm-6">
+		<%if @post.updated_text.present?%>
+		<div class="card text-white bg-dark mb-4" style="max-width: 18rem;">
+			<div class="card-header">Post(<%=@post.words%>)</div>
+			<div class="card-body">
+				<p class="card-text"><%=@post.updated_text%></p>
+			</div>
+		</div>
 		</div>
 		<%if @post.status!="completed"%>
 		<div class="col-md-8">
@@ -22,11 +24,6 @@
 			</div>
 			<%end%>
 		<%end%>
-			<%else%>
-			<div class="col-md-4">
-				<%= link_to "Pay",payments_new_path(:id=>@post.id),class: "btn btn-success" %>
-			</div>
-			<%end%>
 	</div>
 </div>
 

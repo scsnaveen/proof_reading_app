@@ -1,91 +1,82 @@
 <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>
+<div id="chronoExample">
+	<%if @request.time_taken.present?%>
+	<div><h3>Previous time taken:<%=Time.at(@request.time_taken).utc.strftime("%H:%M:%S")%></h3></div>
+	<%end%>
+    <div class="values">00:00:00</div>
+    <div>
+        <button class="startButton">Resume</button>
+        <button class="pauseButton" >Pause</button>
+    </div>
+</div>
 
-<%= rails_admin_form_for @post, url: proof_reading_path(@post, @post.id,model_name: Post), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
-
-<h4><%=@post.text%></h4>
-<% @request =Request.find_by(post_id: @post.id)%>
-<%if @request.time_taken.present?%>
-<% t = @request.time_taken%>
-<h5>Previous time taken <%="%02d:%02d:%02d" % [t/3600%24, t/60%60, t%60]%></h5>
-<%end%>
-<h5>Present time</h5><div id="basicUsage">00:00:00</div>
-
-<br>
+<%= rails_admin_form_for @post, url: proof_reading_path(@post, @post.id,model_name: Post), as: @abstract_model.param_key, html: { method: "post", multipart: true, class: "form-horizontal denser", data: { title: @page_name } } do |form|%>
 <div class="container" >
 	<form>
+		<h4><%=@post.text%></h4>
 	<div class="row">
 		<div class="cols-md-8">
 			<div id="word-count-container">
-				<%= form.text_area :updated_text ,class: "form-control", :id => "no-of-words",:keyup=>"startButton",:rows =>"3" ,:cols =>"80"%>
+				<%= form.text_area :updated_text ,class: " updated_text form-control",:rows =>"3" ,:cols =>"80"%>
 			</div>
+			<%= link_to "Save" ,proof_reading_path(:id=>@post.id) ,class: "save btn btn-primary btn-lg",method:"put"%>
 			
-
-			<h4>number of words:<p id="word-count"></p></h4>
-			<%= form.submit "Post" ,class: "btn btn-primary btn-lg"%>
+			<%= form.submit "Submit" ,class: "submit btn btn-primary btn-lg"%>
 			<%= link_to "Reject" ,rejecting_request_path(:id=>@post.id) ,class: "btn btn-primary btn-lg"%>
 		</div>
 	</div>
-</form>
+	</form>
 </div>
 <%end%>
 <script type="text/javascript">
-	
-// 	function updatecount(){
-// 	var wordCount = $("#no-of-words").val().split(' ').length;
-// 	$("#word-count").html(wordCount);	
-// 	};
+
+var timer = new Timer();
+timer.start();
+$('#chronoExample .startButton').click(function () {
+    timer.start();
+});
+
+$('#chronoExample .pauseButton').click(function () {
+    timer.pause();
+});
 
 
-// $(document).keyup(function() {
-// $.ajax({
-//     url: 'proof_reading',
-//     method: 'GET',
-//     dataType: "JSON",
-//     start_time: new Date().getTime(),
-//     data: {"start_time" :$("#start_time").val()},
-//     complete: function(data) {
-//     	var obj = JSON.stringify(data);
-// 		$("#result").html(obj)
-//         alert('This request took '+(new Date().getTime() - this.start_time)+' ms');
-//     }
-// });
-// });
-  var timer = new Timer();
-  timer.start();
-  timer.addEventListener('secondsUpdated', function(e) {
-      $('#basicUsage').html(timer.getTimeValues().toString());
-  });
-  
-// var timer = new Timer();
+timer.addEventListener('secondsUpdated', function (e) {
+    $('#chronoExample .values').html(timer.getTimeValues().toString());
+});
 
-// $('#chronoExample .startButton').keyup(function() {
-//     timer.start();
-// });
+timer.addEventListener('started', function (e) {
+    $('#chronoExample .values').html(timer.getTimeValues().toString());
+});
 
-// $('#chronoExample .pauseButton').click(function () {
-//     timer.pause();
-// });
-
-// $('#chronoExample .stopButton').click(function () {
-//     timer.stop();
-// });
-
-// $('#chronoExample .resetButton').click(function () {
-//     timer.reset();
-// });
-
-// timer.addEventListener('secondsUpdated', function (e) {
-//     $('#chronoExample .values').html(timer.getTimeValues().toString());
-// });
-
-// timer.addEventListener('started', function (e) {
-//     $('#chronoExample .values').html(timer.getTimeValues().toString());
-// });
-
-// timer.addEventListener('reset', function (e) {
-//     $('#chronoExample .values').html(timer.getTimeValues().toString());
-// });
-
-
-
+var time = $("#chronoExample .values").text()
+var update_text =$(".updated_text").val()
+// saving the updated text and time taken
+$(".save").click(function(){
+	var time = $(".values").text()
+$.ajax({
+    url: "proof_reading",
+    data: {"time1": $(".values").text(),
+			"updated_text": $(".updated_text").val()
+		},
+    type: "PUT",
+    success: function (data) {
+        console.log(data);
+    }
+});
+});
+// submiting the text after completion and time taken
+$(".submit").click(function(){
+	var time = $(".values").text()
+$.ajax({
+    url: "proof_reading",
+    data: {"time1": $(".values").text(),
+			"updated_text": $(".updated_text").val()
+		},
+    type: "POST",
+    success: function (data) {
+        console.log(data);
+    }
+});
+});
 </script>
