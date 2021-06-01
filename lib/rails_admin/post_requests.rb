@@ -28,14 +28,11 @@ module RailsAdmin
 						if request.post?|| request.put?
 							@post = Post.find(params[:id])
 							if !Request.where("post_id=? AND status=?",@post.id,"reserved").first.present?
-								arr =[]
 								# verifying if any pending requests are present
 								@requests = Request.where("admin_id = ? AND status=?",current_admin.id,"reserved")
-								@requests.all.each do |request|
-									arr <<request.status.present?
-								end
+						
 								# if pending request present
-								if arr.include?(true)
+								if @requests.present?
 									flash[:alert]= "You already have pending tasks"
 									redirect_to dashboard_path
 									# if pending requests not present

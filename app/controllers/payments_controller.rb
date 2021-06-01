@@ -14,14 +14,11 @@ class PaymentsController < ApplicationController
 		@payment = Payment.where(post_id:@post.id,user_id:current_user.id).first
 		@coupon = Coupon.find_by(code:params[:coupon_code]) 
 		@coupon_redemption = CouponRedemption.where("coupon_id =? AND user_id=?", @coupon.id,current_user.id).first
-		# checking if coupon is present  
+		# checking if coupon is present 
+		puts  @coupon.present?.inspect
 		if @coupon.present?
-			# if entered expired coupon it will raise an error
-			if  !DateTime.now.between?(@coupon.valid_from,@coupon.valid_until) 
-				redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has been expired "
-				return
-			end
 			#checking if that user redemption is present or else creating one 
+			p !@coupon_redemption.present?.inspect
 			if !@coupon_redemption.present?
 				@coupon_redemption = CouponRedemption.new
 				@coupon_redemption.coupon_id = @coupon.id
@@ -29,10 +26,20 @@ class PaymentsController < ApplicationController
 				@coupon_redemption.coupon_redemptions_count = 0
 				@coupon_redemption.save
 			end
+			# if coupon redemption limit is reached to maximum
+			if @coupon.redemption_limit == @coupon_redemption.coupon_redemptions_count.present?
+				redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has reached maximum limit  "
+			end
+
+			# if entered expired coupon it will raise an error
+			if !DateTime.now.between?(@coupon.valid_from,@coupon.valid_until) 
+				redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has been expired "
+			end
 			@payment.discount_id            = @coupon.id 
 			@payment.save
 			@coupon_redemption.coupon_redemptions_count+=1
 			@coupon_redemption.save
+			puts "sssssss"
 			redirect_to posts_show_path(:id=>@post.id),notice: "Applied coupon successful"
 		else
 			flash[:alert]="Enter valid coupon code"
@@ -53,22 +60,25 @@ class PaymentsController < ApplicationController
 							:symbol=>"%",
 							:word_symbol=>" "
 						}
+						respond_to do |format|
+							format.html
+							format.json {render :json=>@result}
+						end
 					else
 						@result = {
-						:percentage=>coupon.amount.to_i,
-						:total_amount=> coupon.amount.to_i,
-						:symbol=>"",
-						:word_symbol=>"Rs."
-					}
-
+							:percentage=>coupon.amount.to_i,
+							:total_amount=> coupon.amount.to_i,
+							:symbol=>"",
+							:word_symbol=>"Rs."
+						}
+						respond_to do |format|
+							format.html
+							format.json {render :json=>@result}
+						end
 					end
 				else
 					@result = "Not a valid coupon"
 				end
-		end
-		respond_to do |format|
-			format.html
-			format.json {render :json=>@result}
 		end
 	end
 

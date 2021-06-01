@@ -1,16 +1,80 @@
-<div class="container" >
-	<div class="row-auto">
-		<div class="col-md-6 mx-auto mb-5">
-
-		<%= form_with(model: post, url: posts_create_path(post), method: "post") do |f| %>
-			<h3>Enter a text </h3>
-			<div id="word-count-container">
-			<%= f.text_area :text ,class: "form-control", :id => "no-of-words", :onkeydown=>"updatecount()"%>
-			</div>
-			<h4>number of words:<p id="word-count"></p></h4>
-			<h4>Amount:<p id="word-amount"></p></h4>
-			<%= f.submit "Post" ,class: "btn btn-primary btn-lg"%>
-		<% end %>
+<div style="margin:5% 40% 0% 33%;float:left; width:500px; box-shadow:0 0 3px #aaa; height:auto;color:#666;">
+	 <div style="width:100%; padding:10px; float:left; background:#1ca8dd; color:#fff; font-size:30px; text-align:center;">Invoice
+	 </div>
+		<div style="width:100%; padding:0px 0px;border-bottom:1px solid rgba(0,0,0,0.2);float:left;">
+				<div style="width:30%; float:left;padding:10px;">
+					 
+						<span style="font-size:14px;float:left; width:100%;">
+								<%=User.find(@post.user_id).user_name%>
+						</span>
+			 <span style="font-size:14px;float:left;width:100%;">
+								
+						</span>
+			<span style="font-size:14px;float:left;width:100%;">
+				<%=User.find(@post.user_id).email%>
+			</span>
+				</div>
+		
+				<div style="width:40%; float:right;padding:">
+						<span style="font-size:14px;float:right;  padding:10px; text-align:right;">
+								<b>Date : </b><%=@post.updated_at%>
+						</span>
+			<span style="font-size:14px;float:right;  padding:10px; text-align:right;">
+							 <b> </b>
+						</span>
+				</div>
 		</div>
-	</div>
+				
+		<div style="width:100%; padding:0px; float:left;">
+			<div style="width:100%;float:left;background:#efefef;">
+				<span style="float:left; text-align:left;padding:10px;width:50%;color:#888;font-weight:600;">
+				Description
+				</span>
+				<span style="font-weight:600;float:left;padding:10px ;width:10%;color:#888;text-align:right;">
+				 words
+				</span>
+				 <span style="font-weight:600;float:left;padding:10px ;width:40%;color:#888;text-align:right;">
+					Amount
+				</span>
+			</div>
+		
+			<div style="width:100%;float:left;">
+				<h3>User text details</h3>
+						<span style="float:left; text-align:left;padding:10px;width:50%;color:#888;">
+						amount per word : <%= @post.per_word_amount.to_f%>
+				</span>
+				<span style="float:left; text-align:left;padding:10px;width:10%;color:#888;">
+						<%= @post.text.split(" ").size%>
+				</span>
+				 <span style="font-weight:normal;float:left;padding:10px ;width:40%;color:#888;text-align:right;">
+					 <%=@payment.amount%>
+				</span>
+			</div>
+			<h3>proof readed text Details</h3>
+		 <div style="width:100%;float:left;">
+					<span style="float:left; text-align:left;padding:10px;width:50%;color:#888;">
+					amount per word : <%=@post.per_word_amount.to_f%>
+					<span style="font-size:10px; float:left; width:100%;">
+					</span>
+				</span>
+				 <span style="font-weight:normal;float:left;padding:10px ;width:10%;color:#888;text-align:right;">
+						<%= @post.words%>
+				</span>
+				<span style="font-weight:normal;float:left;padding:10px ;width:40%;color:#888;text-align:right;">
+						<%= @payment1.amount %>
+				</span>
+			</div>
+		
+				 <div style="width:100%;float:left; background:#fff;">
+				 <span style="font-weight:600;float:right;padding:10px 0px;width:40%;color:#666;text-align:center;">
+					 Discount Amount:<%=@payment1.discount_amount%>
+				</span>
+			</div>
+			<div style="width:100%;float:left; background:#fff;">
+				 <span style="font-weight:600;float:right;padding:10px 0px;width:40%;color:#666;text-align:center;">
+					 Amount paid:<%=@payment1.paid_amount%>
+				</span>
+			</div>
+
+		</div>
 </div>

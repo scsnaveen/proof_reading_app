@@ -20,7 +20,7 @@
 		<% @posts.all.each do |post|%>
 		<tr>
 			<td><%=post.text%></td>
-			<td><%=post.words%></td>
+			<td><%=post.text.split(" ").size%></td>
 			<td><%=post.status%></td>
 			<%payment = Payment.find_by("post_id = ? AND status=?", post.id,"success")%>
 			<%if payment.present?%>
