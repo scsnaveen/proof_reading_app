@@ -59,4 +59,5 @@ gem "twitter-bootstrap-rails"
 gem "rails_admin", '~> 2.0'
 gem 'cancancan'
 gem 'easy_timer'
-
+gem 'wicked_pdf', '~> 1.4'
+gem 'wkhtmltopdf-binary'

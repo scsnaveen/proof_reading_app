@@ -64,8 +64,17 @@ class PostsController < ApplicationController
 		@user_wallet = current_user.wallet
 		@request = Request.where("post_id=? AND status=?",@post.id,"completed").first
 		@user_payment =Payment.where("post_id=? AND user_id=?",@post.id,current_user.id).first
-		words_difference =(@post.updated_text.split(" ")-@post.text.split(" ")).count
-		puts words_difference.inspect
+		# comparing two string words
+		s1 = @post.text.split(' ')
+		s2 =@post.updated_text.split(' ')
+		diff = []
+		s2.zip(s1).each do |s1, s2|
+			if s1 != s2
+				diff << s2
+			end
+		end
+		# getting count of different words
+		words_difference =diff.count
 		# checking if coupon is present  
 		if @user_payment.discount_id.present?
 			@coupon = Coupon.find(@user_payment.discount_id) 
@@ -103,11 +112,11 @@ class PostsController < ApplicationController
 			# payment for super admin commission to successful proof reading 
 			@super_admin_payment               = Payment.new()
 			@super_admin_payment.admin_id      = Admin.find_by(:role=>"Super Admin").id
-			@super_admin_payment.amount        = @payment.paid_amount
+			@super_admin_payment.amount        = (PaymentCharge.first.commission_percentage.to_f / 100 * @super_admin_payment.amount.to_f).round(2)
 			@super_admin_payment.reference_id  = @payment_reference
 			@super_admin_payment.status        = "completed"
 			@super_admin_payment.post_id       = @post.id
-			@super_admin_payment.paid_amount   = PaymentCharge.first.commission_percentage.to_f / 100 * @super_admin_payment.amount.to_f
+			@super_admin_payment.paid_amount   = @super_admin_payment.amount
 			@super_admin_wallet                = Admin.find_by(:role=>"Super Admin").wallet
 			@super_admin_wallet.transaction do
 					@super_admin_wallet.with_lock do 
