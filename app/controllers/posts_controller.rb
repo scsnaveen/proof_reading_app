@@ -63,74 +63,95 @@ class PostsController < ApplicationController
 		@post = Post.find(params[:id])
 		@user_wallet = current_user.wallet
 		@request = Request.where("post_id=? AND status=?",@post.id,"completed").first
-		loop do 
-			@payment_reference = ( "complete" + [*(0..9)].sample(10).join.to_s )
-			break @payment_reference unless Payment.exists?(reference_id: @payment_reference)
-		end
-		# payment for super admin commission to successful proof reading 
-		@payment               = Payment.new()
-		@payment.admin_id      = Admin.find_by(:role=>"Super Admin").id
-		@payment.amount        = Payment.find_by(post_id:@post.id).paid_amount
-		@payment.reference_id  = @payment_reference
-		@payment.status        = "success"
-		@payment.post_id       = @post.id
-		@payment.paid_amount   = PaymentCharge.first.commission_percentage / 100 * @payment.amount
-		@super_admin_wallet    = Admin.find_by(:role=>"Super Admin").wallet
-		@user_wallet.transaction do
+		@user_payment =Payment.where("post_id=? AND user_id=?",@post.id,current_user.id).first
+		words_difference =(@post.updated_text.split(" ")-@post.text.split(" ")).count
+		puts words_difference.inspect
+		# checking if coupon is present  
+		if @user_payment.discount_id.present?
+			@coupon = Coupon.find(@user_payment.discount_id) 
+			@coupon_redemption = CouponRedemption.where("coupon_id =? AND user_id=?", @coupon.id,current_user.id).first
+			loop do 
+				@payment_reference = ( "success" + [*(0..9)].sample(10).join.to_s )
+				break @payment_reference unless Payment.exists?(reference_id: @payment_reference)
+			end
+			# user return payment and paid amount
+			@payment                  = Payment.new()
+			@payment.amount           = words_difference * PaymentCharge.first.per_word_amount.to_f
+			@payment.reference_id     = @payment_reference
+			@payment.status           = "completed"
+			@payment.user_id          = current_user.id
+			@payment.post_id          = @post.id
+			@payment.discount_id      = @coupon.id
+			if @coupon.coupon_type == "percentage"
+				@payment.discount_amount  = @payment.amount.to_f/100.0 * @coupon.percentage.to_f
+			else 
+				@payment.discount_amount  = @coupon.amount.to_f
+			end
+			@user_return_amount        = @user_payment.paid_amount - @payment.amount + @payment.discount_amount
+			@payment.paid_amount       = @user_payment.paid_amount - @user_return_amount
+			@user_wallet               = User.find(@post.user_id).wallet
+			@user_wallet.transaction do
 				@user_wallet.with_lock do 
-					@user_wallet.hold_amount = @user_wallet.hold_amount -  @payment.paid_amount
+					@user_wallet.hold_amount = @user_wallet.hold_amount.to_f -  @user_return_amount.to_f
 					@user_wallet.save
 
-					@super_admin_wallet.balance = @super_admin_wallet.balance + @payment.paid_amount
-					@super_admin_wallet.save
+					@user_wallet.balance = @user_wallet.balance.to_f + @user_return_amount.to_f
+					@user_wallet.save
 				end
 			end
-		@payment.save
-		
-			# payment for fined amount credited amount to super admin
+			@payment.save
+			# payment for super admin commission to successful proof reading 
+			@super_admin_payment               = Payment.new()
+			@super_admin_payment.admin_id      = Admin.find_by(:role=>"Super Admin").id
+			@super_admin_payment.amount        = @payment.paid_amount
+			@super_admin_payment.reference_id  = @payment_reference
+			@super_admin_payment.status        = "completed"
+			@super_admin_payment.post_id       = @post.id
+			@super_admin_payment.paid_amount   = PaymentCharge.first.commission_percentage.to_f / 100 * @super_admin_payment.amount.to_f
+			@super_admin_wallet                = Admin.find_by(:role=>"Super Admin").wallet
+			@super_admin_wallet.transaction do
+					@super_admin_wallet.with_lock do 
+						@user_wallet.hold_amount = @user_wallet.hold_amount.to_f -  @super_admin_payment.paid_amount.to_f
+						@user_wallet.save
+
+						@super_admin_wallet.balance = @super_admin_wallet.balance.to_f + @super_admin_payment.paid_amount.to_f
+						@super_admin_wallet.save
+					end
+				end
+			@super_admin_payment.save
+			
+			# payment for proofreader amount 
 			@payment1               = Payment.new()
-			@payment1.admin_id      = Admin.find_by(:role=>"Super Admin").id
-			@payment1.amount        = @payment.amount
+			@payment1.admin_id      = @request.admin_id
+			@payment1.amount        = @payment.paid_amount.to_f - @super_admin_payment.paid_amount.to_f
 			@payment1.reference_id  = @payment_reference
-			@payment1.status        = "fine received"
+			@payment1.status        = "completed"
 			@payment1.post_id       = @post.id
-			@payment1.paid_amount   = @payment.paid_amount
+			@payment1.paid_amount   = @payment1.amount
 			@admin_wallet          = Admin.find(@request.admin_id).wallet
 			@admin_wallet.transaction do
 				@admin_wallet.with_lock do 
-					@rejected_admin_wallet.balance = @rejected_admin_wallet.balance -  @payment.paid_amount
-					@rejected_admin_wallet.save
+					@user_wallet.hold_amount = @user_wallet.hold_amount.to_f -  @payment1.paid_amount.to_f
+					@user_wallet.save
 
-					@admin_wallet.balance = @admin_wallet.balance + @payment.paid_amount
+					@admin_wallet.balance = @admin_wallet.balance.to_f + @payment1.paid_amount.to_f
 					@admin_wallet.save
 				end
 			end
 			@request.save
 			@payment.save
 			@payment1.save
-			# sending requests for admins who are not busy
-			@admins = Admin.where("role=? AND admin_status=?","ProofReader","not busy")
-			@admins.all.each do |admin|
-				if !(Request.where("admin_id=? AND post_id=?",admin.id,@post.id).first.present?)
-					@request = Request.new
-					@request.post_id = @post.id
-					@request.admin_id = admin.id
-					@request.status = "pending"
-					@request.save
-					AdminMailer.new_post_admin_notify_email(admin.id,@request).deliver_now rescue nil
-				end	
-			end
-			current_admin.admin_status="not busy"
-			current_admin.save
-			flash[:alert]="The request is rejected and collected amount of #{@payment.paid_amount}"
-			redirect_to dashboard_path
-		@post.status ="completed"
-		@post.save
-		@request = Request.find_by(post_id: @post.id)
-		@request.status="completed"
-		@request.reason = params[:reason]
-		@request.save
-		redirect_to posts_index_path,notice: "Thank you ,Please visit again"
+			@post.status ="completed"
+			@post.save
+			@request = Request.find_by(post_id: @post.id)
+			@request.status="completed"
+			@request.reason = params[:reason]
+			@request.save
+			redirect_to posts_index_path,notice: "Thank you ,Please visit again"
+		else
+			flash[:alert]="Enter valid coupon code"
+			redirect_to payments_new_path(:id=>@post.id)	
+		end
 	end
 
 	# if user rejected the updated text
