@@ -118,7 +118,7 @@ class PostsController < ApplicationController
 
 			# user paid amount
 			@payment1                  = Payment.new()
-			@payment1.amount           = @user_payment.paid_amount.to_f - @user_return_amount.to_f
+			@payment1.amount           = @payment.amount
 			@payment1.reference_id     = @payment_reference
 			@payment1.status           = "completed"
 			@payment1.user_id          = current_user.id
@@ -126,13 +126,13 @@ class PostsController < ApplicationController
 			@payment1.discount_id      = @coupon.id
 			@payment1.payment_type     = "credited"
 			@payment1.discount_amount   = @payment.discount_amount
-			@payment1.paid_amount       = @user_payment.paid_amount.to_f - @user_return_amount.to_f
+			@payment1.paid_amount       = @payment.amount
 			@payment1.save
 
 			# payment for super admin commission to successful proof reading 
 			@super_admin_payment               = Payment.new()
 			@super_admin_payment.admin_id      = Admin.find_by(:role=>"Super Admin").id
-			@super_admin_payment.amount        = (PaymentCharge.first.commission_percentage.to_f / 100 * @balance_amount.to_f).round(2)
+			@super_admin_payment.amount        = (PaymentCharge.first.commission_percentage.to_f / 100 * @payment.amount.to_f).round(2)
 			@super_admin_payment.reference_id  = @payment_reference
 			@super_admin_payment.status        = "completed"
 			@super_admin_payment.post_id       = @post.id
@@ -152,7 +152,7 @@ class PostsController < ApplicationController
 			# payment for proofreader amount 
 			@payment2               = Payment.new()
 			@payment2.admin_id      = @request.admin_id
-			@payment2.amount        = @balance_amount.to_f - @super_admin_payment.paid_amount.to_f
+			@payment2.amount        = @payment.amount.to_f - @super_admin_payment.paid_amount.to_f
 			@payment2.reference_id  = @payment_reference
 			@payment2.status        = "completed"
 			@payment2.post_id       = @post.id
