@@ -21,7 +21,9 @@
 		</div>
 		<%end%>
 		<%if !Payment.find_by(post_id:@post.id).discount_id.present?%>
+		<%if @post.status != "completed"%>
 		<h4>Before submitting apply coupon <%=link_to "add coupon",payments_show_path(:post_id=>@post.id)%></h4>
+		<%end%>
 		<%end%>
 		<%if @post.status != "completed"%>
 		<div class="col-md-8">

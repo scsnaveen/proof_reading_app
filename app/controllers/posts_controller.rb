@@ -211,7 +211,7 @@ class PostsController < ApplicationController
 		@post = Post.find(params[:id])
 		@request= Request.find_by(post_id:@post.id)
 		@payment = Payment.find_by("user_id = ? AND post_id = ? AND status = ?",@post.user_id,@post.id,"success")
-		@payment1 = Payment.find_by("user_id = ? AND post_id = ? AND status = ?",@post.user_id,@post.id,"completed")
+		@payment1 = Payment.find_by("user_id = ? AND post_id = ? AND status = ?",@post.user_id,@post.id,"refund")
 		respond_to do |format|
 			format.html
             format.pdf do

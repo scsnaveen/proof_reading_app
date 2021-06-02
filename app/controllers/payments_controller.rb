@@ -125,8 +125,11 @@ class PaymentsController < ApplicationController
 			AdminMailer.extra_payment(@payment).deliver
 		end
 	end
-	def show 
-		@payment = Payment.find_by(post_id:params[:post_id])
+	def show
+		@post = Post.find(params[:post_id])
+		@payment = Payment.find_by("user_id = ? AND post_id = ? AND status = ?",@post.user_id,@post.id,"success")
+		@payment1 = Payment.find_by("user_id = ? AND post_id = ? AND status = ?",@post.user_id,@post.id,"refund") 
+		# @payment = Payment.find_by(post_id:params[:post_id],user_id:current_user.id)
 	end
 	def admin_payments
 		@payments = Payment.where(admin_id: current_admin.id)

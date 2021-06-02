@@ -34,6 +34,7 @@
 														<td class="col-md-1 text-center"><%=@payment.paid_amount%></td>
 														<%if @payment.discount_id.present?%>
 														<td class="col-md-2 text-center"><%=Coupon.find(@payment.discount_id).code%></td>
+														<%elsif @payment1.present?%>
 														<%else%>
 														<td class="col-md-4 text-center"><%=link_to "Add Coupon",payments_new_path(id:@payment.post_id),class:"btn btn-primary btn-sm"%></td>
 														<%end%>
