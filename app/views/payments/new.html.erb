@@ -64,9 +64,11 @@
 				dataType: "json",
 				data: { "code" : $("#code").val(),"tot_amount": $("#tot_amount").text() },
 				success: function(response){ 
-          console.log(response)
-         $("#result").html("Maxmimum cashback amount is Rs. "+response.total_amount+""+response.word_symbol+""+response.percentage+""+response.symbol)
-				}
+         $("#result").html("Maximum cashback amount is Rs. "+response.total_amount+response.word_symbol+response.percentage+response.symbol)
+				},
+        error: function(response){
+          $("#result").html("enter valid code")
+        }
 		});
 });
 

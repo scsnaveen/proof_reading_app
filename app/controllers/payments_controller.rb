@@ -12,7 +12,7 @@ class PaymentsController < ApplicationController
 	def create
 		@post = Post.find(params[:id])
 		@payment = Payment.where(post_id:@post.id,user_id:current_user.id).first
-		@coupon = Coupon.find_by(code:params[:coupon_code]) 
+		@coupon = Coupon.find_by(code:params[:coupon_code].upcase) 
 		@coupon_redemption = CouponRedemption.where("coupon_id =? AND user_id=?", @coupon.id,current_user.id).first
 		# checking if coupon is present 
 		if @coupon.present?
@@ -48,7 +48,7 @@ class PaymentsController < ApplicationController
 		@result = "not"
 		amount = params[:tot_amount]
 		if params[:code].present?
-			coupon =Coupon.find_by("code = ?",params[:code])
+			coupon =Coupon.find_by("code = ?",params[:code].upcase)
 				if coupon.present?
 					if coupon.coupon_type =="percentage"
 						@result = {
@@ -74,7 +74,9 @@ class PaymentsController < ApplicationController
 						end
 					end
 				else
-					@result = "Not a valid coupon"
+					respond_to do |format|
+						format.json { render :json => {},:status => 404 }
+					end
 				end
 		end
 	end

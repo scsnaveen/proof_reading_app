@@ -9,7 +9,11 @@
     CODE:<%= coupon.code%>
   </div>
   <div class="card-body">
-    <h5 class="card-title">UPTO  <%= coupon.amount%>%</h5>
+  	<%if coupon.coupon_type =="percentage"%>
+    <p class="card-title text-center">Maximum cashback amount is  Rs.<%= coupon.amount.to_i%> upto <%=coupon.percentage.to_i%>%</p>
+    <%else%>
+    <p class="card-title text-center">Maxmimum cashback amount is Rs.<%= coupon.amount.to_i%></p>
+    <%end%>
     <p class="card-text"><%= coupon.description%></p>
   </div>
   <div class="card-footer text-muted">
