@@ -13,9 +13,9 @@ class PaymentsController < ApplicationController
 		@post = Post.find(params[:id])
 		@payment = Payment.where(post_id:@post.id,user_id:current_user.id).first
 		@coupon = Coupon.find_by(code:params[:coupon_code].upcase) 
-		@coupon_redemption = CouponRedemption.where("coupon_id =? AND user_id=?", @coupon.id,current_user.id).first
 		# checking if coupon is present 
 		if @coupon.present?
+		  @coupon_redemption = CouponRedemption.where("coupon_id =? AND user_id=?", @coupon.id,current_user.id).first
 			#checking if that user redemption is present or else creating one 
 			if !@coupon_redemption.present?
 				@coupon_redemption = CouponRedemption.new
