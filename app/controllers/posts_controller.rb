@@ -90,15 +90,24 @@ class PostsController < ApplicationController
 			@payment.payment_type     = "debited"
 			# if coupon type is percentage
 			if @coupon.coupon_type == "percentage"
-				percentage_amount = @payment.amount.to_f/100.0 * @coupon.percentage.to_f
-				# if coupon percentage amount is greater than coupon limit amount
-				if percentage_amount > @coupon.amount.to_f
-					@payment.discount_amount  = rand(@coupon.amount.to_f.round(2))
+				# if payment amount is greater than coupon amount
+				if @payment.amount.to_f > @coupon.amount.to_f
+					percentage_amount = @payment.amount.to_f/100.0 * @coupon.percentage.to_f
+					# if coupon percentage amount is greater than coupon limit amount
+					if percentage_amount > @coupon.amount.to_f
+						@payment.discount_amount  = @coupon.amount.to_f
+					else
+						@payment.discount_amount = percentage_amount.to_f
+					end
 				else
-					@payment.discount_amount = rand(percentage_amount.to_f.round(2))
+					@payment.discount_amount = @payment.amount.to_f
 				end
-			else 
-				@payment.discount_amount  = rand(@coupon.amount.to_f.round(2))
+			else
+				if  @payment.amount.to_f > @coupon.amount.to_f
+					@payment.discount_amount  = @coupon.amount.to_f
+				else
+					@payment.discount_amount  = @payment.amount.to_f
+				end
 			end
 			@user_return_amount        = @user_payment.paid_amount.to_f - @payment.amount.to_f + @payment.discount_amount.to_f
 			@payment.amount            = @user_payment.paid_amount.to_f - @user_return_amount.to_f

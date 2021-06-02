@@ -15,10 +15,8 @@ class PaymentsController < ApplicationController
 		@coupon = Coupon.find_by(code:params[:coupon_code]) 
 		@coupon_redemption = CouponRedemption.where("coupon_id =? AND user_id=?", @coupon.id,current_user.id).first
 		# checking if coupon is present 
-		puts  @coupon.present?.inspect
 		if @coupon.present?
 			#checking if that user redemption is present or else creating one 
-			p !@coupon_redemption.present?.inspect
 			if !@coupon_redemption.present?
 				@coupon_redemption = CouponRedemption.new
 				@coupon_redemption.coupon_id = @coupon.id
@@ -31,7 +29,7 @@ class PaymentsController < ApplicationController
 				redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has been expired "
 			end
 			# if coupon redemption limit is reached to maximum
-			if @coupon.redemption_limit.to_i != @coupon_redemption.coupon_redemptions_count.to_i
+			if @coupon.redemption_limit.to_i > @coupon_redemption.coupon_redemptions_count.to_i
 				@payment.discount_id            = @coupon.id 
 				@payment.save
 				@coupon_redemption.coupon_redemptions_count+=1
