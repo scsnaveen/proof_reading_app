@@ -25,7 +25,6 @@
 														<th class="text-center">Amount</th>
 														<th class="text-center">Paid</th>
 														<th class="text-center">Discount code</th>
-														<th class="text-center">Discount</th>
 												</tr>
 										</thead>
 										<tbody>
@@ -38,8 +37,6 @@
 														<%else%>
 														<td class="col-md-4 text-center"><%=link_to "Add Coupon",payments_new_path(id:@payment.post_id),class:"btn btn-primary btn-sm"%></td>
 														<%end%>
-														<td class="col-md-1 text-center">
-															<%=@payment.amount - @payment.paid_amount%></td>
 												</tr>	
 										</tbody>
 								</table>

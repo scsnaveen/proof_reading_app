@@ -26,21 +26,20 @@ class PaymentsController < ApplicationController
 				@coupon_redemption.coupon_redemptions_count = 0
 				@coupon_redemption.save
 			end
-			# if coupon redemption limit is reached to maximum
-			if @coupon.redemption_limit == @coupon_redemption.coupon_redemptions_count.present?
-				redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has reached maximum limit  "
-			end
-
 			# if entered expired coupon it will raise an error
 			if !DateTime.now.between?(@coupon.valid_from,@coupon.valid_until) 
 				redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has been expired "
 			end
-			@payment.discount_id            = @coupon.id 
-			@payment.save
-			@coupon_redemption.coupon_redemptions_count+=1
-			@coupon_redemption.save
-			puts "sssssss"
-			redirect_to posts_show_path(:id=>@post.id),notice: "Applied coupon successful"
+			# if coupon redemption limit is reached to maximum
+			if @coupon.redemption_limit.to_i != @coupon_redemption.coupon_redemptions_count.to_i
+				@payment.discount_id            = @coupon.id 
+				@payment.save
+				@coupon_redemption.coupon_redemptions_count+=1
+				@coupon_redemption.save
+				redirect_to posts_show_path(:id=>@post.id),notice: "Applied coupon successful"
+			else
+				redirect_to payments_new_path(:id=> @post.id),alert: "Coupon has reached maximum limit"
+			end
 		else
 			flash[:alert]="Enter valid coupon code"
 			redirect_to payments_new_path(:id=>@post.id)	
@@ -56,9 +55,9 @@ class PaymentsController < ApplicationController
 					if coupon.coupon_type =="percentage"
 						@result = {
 							:percentage=>coupon.percentage.to_i,
-							:total_amount=> (amount.to_f/100 * coupon.percentage.to_f).ceil(0),
+							:total_amount=> coupon.amount.to_i,
 							:symbol=>"%",
-							:word_symbol=>" "
+							:word_symbol=>" upto  "
 						}
 						respond_to do |format|
 							format.html
@@ -66,10 +65,10 @@ class PaymentsController < ApplicationController
 						end
 					else
 						@result = {
-							:percentage=>coupon.amount.to_i,
+							:percentage=>"",
 							:total_amount=> coupon.amount.to_i,
 							:symbol=>"",
-							:word_symbol=>"Rs."
+							:word_symbol=>""
 						}
 						respond_to do |format|
 							format.html
